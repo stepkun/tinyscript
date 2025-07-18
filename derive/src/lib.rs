@@ -1,6 +1,6 @@
 // Copyright © 2025 Stephan Kunz
 
-//! Derive macro [`ScriptEnum`] for `dimas-scripting`
+//! Derive macro [`ScriptEnum`] for `tinyscript`
 //!
 
 #[doc(hidden)]

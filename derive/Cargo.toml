@@ -7,7 +7,7 @@ authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 edition = "2024"
 rust-version = "1.86.0"
 description = "Procedural macros for tinyscript"
-documentation = "https://docs.rs/dimas-scripting-macros/latest/dimas-scripting-macros/"
+documentation = "https://docs.rs/tinyscript-derive/latest/tinyscript-derive/"
 readme = "README.md"
 exclude = [
     "benches/**",

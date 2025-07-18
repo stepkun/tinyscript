@@ -46,6 +46,9 @@ pub use error::Error;
 pub use execution::Chunk;
 pub use runtime::{Runtime, SharedRuntime};
 
+// reexport
+pub use tinyscript_derive::ScriptEnum;
+
 // region:		--- modules
 use alloc::{
     collections::btree_map::BTreeMap,
