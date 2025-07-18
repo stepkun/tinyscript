@@ -1,0 +1,37 @@
+# Copyright © 2025 Stephan Kunz
+
+[package]
+name = "tinyscript-derive"
+version = "0.1.0"
+authors = ["stepkun <stephan.kunz@kabelbw.de>"]
+edition = "2024"
+rust-version = "1.86.0"
+description = "Procedural macros for tinyscript"
+documentation = "https://docs.rs/dimas-scripting-macros/latest/dimas-scripting-macros/"
+readme = "README.md"
+exclude = [
+    "benches/**",
+    "examples/**",
+    "tests/**",
+]
+
+[lib]
+proc-macro = true
+
+[[test]]
+name = "tests"
+path = "tests/all.rs"
+
+[dependencies]
+proc-macro2 = "1.0"
+quote = "1.0"
+syn = { version = "2.0", features = ["full", "parsing", "visit-mut"] }
+
+[build-dependencies]
+
+[dev-dependencies]
+tinyscript = { path = "../" }
+trybuild = { version = "1.0.106", features = ["diff"] }
+
+[lints]
+workspace = true

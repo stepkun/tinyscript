@@ -1,0 +1,61 @@
+# Copyright © 2025 Stephan Kunz
+
+[package]
+name = "tinyscript"
+version = "0.1.0"
+authors = ["stepkun <stephan.kunz@kabelbw.de>"]
+license = "MIT OR Apache-2.0"
+description = "Tiny, C-like scripting language"
+edition = "2024"
+rust-version = "1.86.0"
+repository = "https://github.com/stepkun/tinyscript"
+documentation = "https://docs.rs/dimas-scripting/latest/dimas-scripting/"
+readme = "README.md"
+exclude = [
+    "benches/**",
+    "examples/**",
+    "tests/**",
+]
+
+[workspace.lints.rust]
+unsafe_code = "warn"
+missing_docs = "warn"
+#unused="allow" # for dev only
+
+[workspace.lints.rustdoc]
+private_intra_doc_links = "allow"
+
+[workspace.lints.clippy]
+enum_glob_use = "deny"
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+
+[[bench]]
+name = "equality"
+harness = false
+
+[[bench]]
+name = "comparison"
+harness = false
+
+[[bench]]
+name = "expression"
+harness = false
+
+[lints]
+workspace = true
+
+[dependencies]
+tinyscript-derive = { path = "derive", version = "0.1.0", optional = true }
+parking_lot = "0.12.4"
+thiserror = "2.0.12"
+
+[dev-dependencies]
+criterion = "0.6.0"
+rstest = "0.25.0"
+
+[features]
+default = ["std"]
+std = []
+

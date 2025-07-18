@@ -1,0 +1,5 @@
+error: expected attribute, found derive macro `tinyscript_derive::ScriptEnum`
+ --> tests/enum/02-wrong-usage.rs:5:3
+  |
+5 | #[tinyscript_derive::ScriptEnum]
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not an attribute
