@@ -4,12 +4,13 @@
 name = "tinyscript-derive"
 version = "0.1.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
+license = "MIT OR Apache-2.0"
 edition = "2024"
 rust-version = "1.86.0"
 description = "Procedural macros for tinyscript"
 documentation = "https://docs.rs/tinyscript-derive/latest/tinyscript-derive/"
 repository = "https://github.com/stepkun/tinyscript"
-readme = "README.md"
+readme = "../README.md"
 exclude = [
     "benches/**",
     "examples/**",
