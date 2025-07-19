@@ -8,6 +8,7 @@ edition = "2024"
 rust-version = "1.86.0"
 description = "Procedural macros for tinyscript"
 documentation = "https://docs.rs/tinyscript-derive/latest/tinyscript-derive/"
+repository = "https://github.com/stepkun/tinyscript"
 readme = "README.md"
 exclude = [
     "benches/**",

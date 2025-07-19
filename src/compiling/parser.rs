@@ -8,6 +8,33 @@
 //! - Jon Gjengsets [video](https://www.youtube.com/watch?v=mNOLaw-_Buc) & [example](https://github.com/jonhoo/lox/blob/master/src/parse.rs)
 //! - Jürgen Wurzers implementation of [Bantam](https://github.com/jwurzer/bantam-rust/blob/master/src/bantam/bantam_parser.rs)
 //!
+//! Definition of the grammer (following this [notation](https://craftinginterpreters.com/representing-code.html#rules-for-grammars)):
+//! ```no-test
+//! script      → statement* EoF ;
+//! statement   → expression ";" ;
+//! expression  → assignment ;
+//! assignment  → IDENTIFIER ":=" assignment | IDENTIFIER "=" assignment | logic_or ;
+//! ternary     → logic_or "?" expression ":" expression ;
+//! logic_or    → logic_and ( "||" logic_and )* ;
+//! logic_and   → binary_or ( "&&" binary_or )* ;
+//! binary_or   → binary_xor ( "|" binary_xor )* ;
+//! binary_xor  → binary_and ( "^" binary_and )* ;
+//! binary_and  → equality ( "&" equality )* ;
+//! equality    → comparison ( ( "!=" | "==" ) comparison )* ;
+//! comparison  → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+//! term        → factor ( ( "-" | "+" ) factor )* ;
+//! factor      → unary ( ( "/" | "*" ) unary )* ;
+//! unary       → ( "!" | "-" | "~") unary | primary ;
+//! primary     → "true" | "false" | FLOATNUMBER | HEXNUMBER| INTNUMBER  | STRING | IDENTIFIER | "(" expression ")" ;
+//!
+//! FLOATNUMBER → DIGIT+ ( "." DIGIT+ ) ;
+//! HEXNUMBER   → (0x | 0X) + (DIGIT+ | "a" ... "f"+ | "A" ... "F"+ );
+//! INTNUMBER   → ( DIGIT+ ) ;
+//! STRING      → "\'" <any char except "\'">* "\'" ;
+//! IDENTIFIER  → ALPHA ( ALPHA | DIGIT )* ;
+//! ALPHA       → "a" ... "z" | "A" ... "Z" | "_" ;
+//! DIGIT       → "0" ... "9" ;
+//! ```
 
 #[doc(hidden)]
 #[cfg(feature = "std")]
