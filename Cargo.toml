@@ -58,3 +58,18 @@ rstest = "0.25.0"
 [features]
 default = ["std"]
 std = []
+
+[profile.release]
+opt-level = 's'			# Optimize for size.
+lto = true				# Enable Link Time Optimisation
+codegen-units = 1		# Reduced to increase optimisations
+overflow-checks = true	# useful
+
+[profile.production]
+inherits="release"
+panic = 'abort'		    # Abort on panic
+strip = "symbols"	    # Strip symbols from binary
+
+[profile.samply]
+inherits = "release"
+debug = true		    # Create debug symbols for profiling
