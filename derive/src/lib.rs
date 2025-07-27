@@ -108,7 +108,7 @@ fn derive_scripting_enum(input: &DeriveInput) -> TokenStream {
 ///
 /// # Panics
 /// - if used on structs or unions
-#[proc_macro_derive(ScriptEnum, attributes(dimas))]
+#[proc_macro_derive(ScriptEnum, attributes(tinyscript))]
 pub fn derive_script_enum(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
     // Construct a representation of Rust code as a syntax tree
     let input: DeriveInput = syn::parse(input).expect("could not parse input");
