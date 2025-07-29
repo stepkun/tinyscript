@@ -6,7 +6,7 @@
 use std::time::Duration;
 
 use criterion::{Criterion, criterion_group, criterion_main};
-use tinyscript::{DefaultEnvironment, Runtime};
+use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
 
 const SAMPLES: usize = 100;
 const ITERATIONS: usize = 100;
@@ -19,31 +19,37 @@ fn expression(c: &mut Criterion) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    let chunk = runtime.parse("(3 + 2) * (4 - 1);").expect("snh");
+    let chunk = runtime
+        .parse("(3 + 2) * (4 - 1);")
+        .expect(SHOULD_NOT_HAPPEN);
     group.bench_function("simple", |b| {
         b.iter(|| {
             for _ in 1..=ITERATIONS {
-                runtime.execute(&chunk, &mut env).expect("snh");
+                runtime.execute(&chunk, &mut env).expect(SHOULD_NOT_HAPPEN);
             }
             std::hint::black_box(());
         });
     });
 
-    let chunk = runtime.parse("!(5 - 4 > 3 * 2 == !nil);").expect("snh");
+    let chunk = runtime
+        .parse("!(5 - 4 > 3 * 2 == !nil);")
+        .expect(SHOULD_NOT_HAPPEN);
     group.bench_function("moderate", |b| {
         b.iter(|| {
             for _ in 1..=ITERATIONS {
-                runtime.execute(&chunk, &mut env).expect("snh");
+                runtime.execute(&chunk, &mut env).expect(SHOULD_NOT_HAPPEN);
             }
             std::hint::black_box(());
         });
     });
 
-    let chunk = runtime.parse("'this is a ' + 'test string';").expect("snh");
+    let chunk = runtime
+        .parse("'this is a ' + 'test string';")
+        .expect(SHOULD_NOT_HAPPEN);
     group.bench_function("strings", |b| {
         b.iter(|| {
             for _ in 1..=ITERATIONS {
-                runtime.execute(&chunk, &mut env).expect("snh");
+                runtime.execute(&chunk, &mut env).expect(SHOULD_NOT_HAPPEN);
             }
             std::hint::black_box(());
         });

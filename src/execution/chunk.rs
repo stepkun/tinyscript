@@ -152,8 +152,20 @@ impl Chunk {
     /// constant instruction
     #[cfg(feature = "std")]
     fn jump_instruction(&self, name: &str, offset: usize) -> usize {
-        let target = (usize::from(self.code.get(offset + 1).expect("snh").to_owned()) << 8)
-            + usize::from(self.code.get(offset + 2).expect("snh").to_owned());
+        use crate::SHOULD_NOT_HAPPEN;
+
+        let target = (usize::from(
+            self.code
+                .get(offset + 1)
+                .expect(SHOULD_NOT_HAPPEN)
+                .to_owned(),
+        ) << 8)
+            + usize::from(
+                self.code
+                    .get(offset + 2)
+                    .expect(SHOULD_NOT_HAPPEN)
+                    .to_owned(),
+            );
 
         std::println!("{name:16} {offset:05} {target:05}");
         offset + 3

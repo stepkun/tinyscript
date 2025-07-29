@@ -2,14 +2,14 @@
 
 [package]
 name = "tinyscript"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 license = "MIT OR Apache-2.0"
 description = "Tiny, C-like scripting language"
 edition = "2024"
 rust-version = "1.86.0"
 repository = "https://github.com/stepkun/tinyscript"
-documentation = "https://docs.rs/tinyscript/latest/tinyscript/"
+documentation = "https://docs.rs/tinyscript"
 readme = "README.md"
 exclude = [
     "benches/**",
@@ -47,7 +47,7 @@ harness = false
 workspace = true
 
 [dependencies]
-tinyscript-derive = { path = "derive", version = "0.1.0"}
+tinyscript-derive = { path = "derive", version = "0.1.1"}
 parking_lot = "0.12.4"
 thiserror = "2.0.12"
 

@@ -16,6 +16,19 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.1.1] - 2025-07-29
+
+### Added
+- Usage eample in README
+- build profiles
+
+### Changed
+- centralized literales
+- updated dependencies
+
+### Fixed
+- links to documentation
+
 ## [0.1.0] - 2025-07-19
 
 Version 0.1.0 focussed on implementation of the core language.

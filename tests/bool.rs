@@ -2,7 +2,7 @@
 
 //! Tests of scripting equality, inequality & negation
 
-use tinyscript::{DefaultEnvironment, Runtime};
+use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
 
 use rstest::rstest;
 
@@ -21,7 +21,7 @@ fn equality(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -40,7 +40,7 @@ fn inequality(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -61,6 +61,6 @@ fn negation(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }

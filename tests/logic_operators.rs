@@ -2,7 +2,7 @@
 
 //! Tests of scripting logic operators
 
-use tinyscript::{DefaultEnvironment, Runtime};
+use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
 
 use rstest::rstest;
 
@@ -20,7 +20,7 @@ fn and(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -38,7 +38,7 @@ fn or(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -49,7 +49,7 @@ fn and_or(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -60,7 +60,7 @@ fn bitwise_and(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -72,7 +72,7 @@ fn bitwise_or(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -84,7 +84,7 @@ fn bitwise_xor(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -95,6 +95,6 @@ fn ternary(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }

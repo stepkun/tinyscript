@@ -2,7 +2,7 @@
 
 //! Tests of scripting operators
 
-use tinyscript::{DefaultEnvironment, Runtime};
+use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
 
 use rstest::rstest;
 
@@ -17,7 +17,7 @@ fn define_globals(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -30,7 +30,7 @@ fn change_globals(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -45,7 +45,7 @@ fn assignment_with_change(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -59,7 +59,7 @@ fn assignment_with_complex_change(#[case] input: &str, #[case] expected: &[u8]) 
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }
 
@@ -78,6 +78,6 @@ fn complex_examples(#[case] input: &str, #[case] expected: &[u8]) {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect("snh");
+    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
     assert_eq!(runtime.stdout(), expected);
 }

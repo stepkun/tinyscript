@@ -3,6 +3,19 @@
 __tinyscript__ is considered to ba a superset of the scripting language
 defined in [BehviorTree.CPP](https://www.behaviortree.dev/docs/guides/scripting).
 
+## Usage
+
+```rust
+use tinyscript::{Runtime, DefaultEnvironment};
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut runtime = Runtime::default();
+    let mut env = DefaultEnvironment::default();
+    let value = runtime.run("2 * 2 == 4", &mut env)?;
+    Ok(())
+}
+```
+
 ## License
 
 Licensed under either of
