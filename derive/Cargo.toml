@@ -20,6 +20,23 @@ exclude = [
 [lib]
 proc-macro = true
 
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = [
+  'cfg(context, values(any()))',
+] }
+unsafe_code = "warn"
+missing_docs = "warn"
+#unused="allow" # for dev only
+
+[lints.rustdoc]
+private_intra_doc_links = "allow"
+
+[lints.clippy]
+enum_glob_use = "deny"
+pedantic = { level = "deny", priority = -1 }
+nursery = { level = "deny", priority = -1 }
+unwrap_used = "deny"
+
 [[test]]
 name = "tests"
 path = "tests/all.rs"
@@ -34,6 +51,3 @@ syn = { version = "2.0", features = ["full", "parsing", "visit-mut"] }
 [dev-dependencies]
 tinyscript = { path = "../" }
 trybuild = { version = "1.0.106", features = ["diff"] }
-
-[lints]
-workspace = true

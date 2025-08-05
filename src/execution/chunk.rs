@@ -9,9 +9,12 @@ extern crate std;
 // region:      --- modules
 use alloc::{borrow::ToOwned, vec::Vec};
 
-use crate::{Error, execution::op_code::OpCode};
+use crate::Error;
 
 use super::ScriptingValue;
+
+#[cfg(feature = "std")]
+use crate::execution::op_code::OpCode;
 // endregion:   --- modules
 
 /// A chunk of bytecode

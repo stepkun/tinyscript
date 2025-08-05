@@ -8,8 +8,8 @@
 extern crate std;
 
 // region:      --- modules
-use alloc::{collections::btree_map::BTreeMap, string::String, sync::Arc, vec::Vec};
-use parking_lot::Mutex;
+use alloc::{collections::btree_map::BTreeMap, string::String, sync::Arc};
+use spin::Mutex;
 
 use crate::{
     Environment,
@@ -17,6 +17,9 @@ use crate::{
     error::Error,
     execution::{Chunk, ScriptingValue, VM},
 };
+
+#[cfg(feature = "std")]
+use std::vec::Vec;
 // endregion:   --- modules
 
 // region:      --- types

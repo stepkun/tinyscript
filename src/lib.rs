@@ -29,7 +29,7 @@ use alloc::{
 };
 
 use execution::ScriptingValue;
-use parking_lot::RwLock;
+use spin::RwLock;
 // endregion:	--- modules
 
 /// Global constant for expect statements that should never happen

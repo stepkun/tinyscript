@@ -1,0 +1,5 @@
+apps:
+  - name: tinyscript-testing
+    selects:
+      - alloc
+      - embedded-test-only
