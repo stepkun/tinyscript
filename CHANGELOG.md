@@ -16,6 +16,14 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.1.2] - 2025-08-05
+
+### Added
+- embedded environment
+
+### Changed
+- replaced 'parking_lot' with 'spin'
+
 ## [0.1.1] - 2025-07-29
 
 ### Added
