@@ -1,6 +1,10 @@
 debug
 target
-/target
 Cargo.lock
+build/
+.vscode/
+
 **/*.rs.bk
-.vscode
+*.pdb
+**/mutants.out*/
+.idea/
