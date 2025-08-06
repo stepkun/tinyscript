@@ -5,12 +5,15 @@ use std::io::{Write, stdin, stdout};
 
 use tinyscript::{DefaultEnvironment, Runtime};
 
+const PROMPT: &str = "> ";
+
 fn repl() {
     let mut env = DefaultEnvironment::default();
     let mut runtime = Runtime::default();
     let mut input = String::new();
 
-    print!("> ");
+    println!("Quit with 'Ctrl+D'");
+    print!("{PROMPT}");
     let _ = stdout().flush();
     loop {
         match stdin().read_line(&mut input) {
@@ -25,19 +28,19 @@ fn repl() {
                             },
                             |chunk| {
                                 //chunk.disassemble("created chunk");
-                                runtime.clear();
                                 if let Err(error) = runtime.execute(&chunk, &mut env) {
                                     println!("execution error: {error}");
                                 } else {
                                     for c in runtime.stdout() {
                                         print!("{}", *c as char);
                                     }
+                                    runtime.clear();
                                 }
                             },
                         );
                     }
                     input.clear();
-                    print!("> ");
+                    print!("{PROMPT}");
                     let _ = stdout().flush();
                 } else {
                     println!("bye");
