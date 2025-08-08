@@ -65,6 +65,11 @@ impl Runtime {
         Ok(())
     }
 
+    /// Get the discriminant of an enum value if it exists
+    pub fn enum_discriminant(&self, name: &str) -> Option<i8>{
+        self.enums.get(name).cloned()
+    }
+
     /// Parse a scripting source.
     /// # Errors
     /// - if script is invalid

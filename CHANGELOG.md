@@ -16,6 +16,11 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.1.3] - 2025-08-08
+
+### Added
+- added function to fetch discriminant of a registered enum value
+
 ## [0.1.2] - 2025-08-05
 
 ### Added
