@@ -66,8 +66,9 @@ impl Runtime {
     }
 
     /// Get the discriminant of an enum value if it exists
+    #[must_use]
     pub fn enum_discriminant(&self, name: &str) -> Option<i8>{
-        self.enums.get(name).cloned()
+        self.enums.get(name).copied()
     }
 
     /// Parse a scripting source.
