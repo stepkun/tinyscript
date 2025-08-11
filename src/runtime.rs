@@ -131,9 +131,9 @@ impl Runtime {
         &self.stdout
     }
 
-    /// Clear stdout.
-    #[cfg(feature = "std")]
+    /// Clear runtime.
     pub fn clear(&mut self) {
+        #[cfg(feature = "std")]
         self.stdout.clear();
     }
 }
