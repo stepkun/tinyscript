@@ -30,14 +30,8 @@ use super::{Lexer, precedence::Precedence, token::Token};
 /// This interface is also used for single-token expressions like variables, in
 /// which case `parse()` simply doesn't consume any more tokens.
 pub trait PrefixParselet: Send + Sync {
-    /// Parse the token
-    fn parse(
-        &self,
-        lexer: &mut Lexer,
-        parser: &mut Parser,
-        chunk: &mut Chunk,
-        token: Token,
-    ) -> Result<(), Error>;
+	/// Parse the token
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error>;
 }
 
 /// Interfaces used by the Pratt parser. An `InfixParselet` is
@@ -47,15 +41,9 @@ pub trait PrefixParselet: Send + Sync {
 /// This interface is also used for postfix expressions, in
 /// which case `parse()` simply doesn't consume any more tokens.
 pub trait InfixParselet: Send + Sync {
-    /// Parse the token together with the left hand expression
-    fn parse(
-        &self,
-        lexer: &mut Lexer,
-        parser: &mut Parser,
-        chunk: &mut Chunk,
-        token: Token,
-    ) -> Result<(), Error>;
+	/// Parse the token together with the left hand expression
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error>;
 
-    /// Get the precedence the parselet is executed with.
-    fn get_precedence(&self) -> Precedence;
+	/// Get the precedence the parselet is executed with.
+	fn get_precedence(&self) -> Precedence;
 }

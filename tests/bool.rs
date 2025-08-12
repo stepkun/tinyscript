@@ -18,11 +18,13 @@ use rstest::rstest;
 #[case("print true == '';", b"false\n")]
 #[case("print false == '';", b"false\n")]
 fn equality(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
@@ -37,11 +39,13 @@ fn equality(#[case] input: &str, #[case] expected: &[u8]) {
 #[case("print true != '';", b"true\n")]
 #[case("print false != '';", b"true\n")]
 fn inequality(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
@@ -58,9 +62,11 @@ fn inequality(#[case] input: &str, #[case] expected: &[u8]) {
 #[case("print !'';", b"false\n")]
 #[case("print !'string';", b"false\n")]
 fn negation(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }

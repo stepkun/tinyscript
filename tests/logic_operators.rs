@@ -17,11 +17,13 @@ use rstest::rstest;
 #[case("print true && false && true", b"false\n")]
 #[case("print true && true && true", b"true\n")]
 fn and(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
@@ -35,33 +37,39 @@ fn and(#[case] input: &str, #[case] expected: &[u8]) {
 #[case("print true || false || true", b"true\n")]
 #[case("print true || true || true", b"true\n")]
 fn or(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
 #[case("print true || true && false;", b"true\n")]
 #[case("print false || true && true;", b"true\n")]
 fn and_or(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
 #[case("print 0x1 & 0x1;", b"1\n")]
 #[case("print 0x1 & 0x0;", b"0\n")]
 fn bitwise_and(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
@@ -69,11 +77,13 @@ fn bitwise_and(#[case] input: &str, #[case] expected: &[u8]) {
 #[case("print 0x1 | 0x0;", b"1\n")]
 #[case("print 0x1 | 0x2;", b"3\n")]
 fn bitwise_or(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
@@ -81,20 +91,24 @@ fn bitwise_or(#[case] input: &str, #[case] expected: &[u8]) {
 #[case("print 0x1 ^ 0x0;", b"1\n")]
 #[case("print 0x1 ^ 0x2;", b"3\n")]
 fn bitwise_xor(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }
 
 #[rstest]
 #[case("print 1 < 2 ? true : false;", b"true\n")]
 #[case("print 1 > 2 ? true : false;", b"false\n")]
 fn ternary(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }

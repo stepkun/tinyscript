@@ -11,9 +11,11 @@ use rstest::rstest;
 #[case("print (5 - (3 - 1)) + +1;", b"4\n")]
 #[case("print !(5 - 4 > 3 * 2 == !nil);", b"true\n")]
 fn expressions(#[case] input: &str, #[case] expected: &[u8]) {
-    let mut env = DefaultEnvironment::default();
-    let mut runtime = Runtime::default();
+	let mut env = DefaultEnvironment::default();
+	let mut runtime = Runtime::default();
 
-    runtime.run(input, &mut env).expect(SHOULD_NOT_HAPPEN);
-    assert_eq!(runtime.stdout(), expected);
+	runtime
+		.run(input, &mut env)
+		.expect(SHOULD_NOT_HAPPEN);
+	assert_eq!(runtime.stdout(), expected);
 }

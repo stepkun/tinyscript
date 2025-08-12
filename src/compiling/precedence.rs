@@ -13,40 +13,40 @@
 /// Precedence levels
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Precedence {
-    None = 0,
-    Assignment,
-    Ternary,
-    Or,
-    And,
-    BitOr,
-    BitXor,
-    BitAnd,
-    Equality,
-    Comparison,
-    Term,
-    Factor,
-    Unary,
-    Primary,
+	None = 0,
+	Assignment,
+	Ternary,
+	Or,
+	And,
+	BitOr,
+	BitXor,
+	BitAnd,
+	Equality,
+	Comparison,
+	Term,
+	Factor,
+	Unary,
+	Primary,
 }
 
 impl Precedence {
-    /// Get the next higher [`Precedence`]
-    pub const fn next_higher(self) -> Self {
-        match self {
-            Self::None => Self::Assignment,
-            Self::Assignment => Self::Ternary,
-            Self::Ternary => Self::Or,
-            Self::Or => Self::And,
-            Self::And => Self::BitOr,
-            Self::BitOr => Self::BitXor,
-            Self::BitXor => Self::BitAnd,
-            Self::BitAnd => Self::Equality,
-            Self::Equality => Self::Comparison,
-            Self::Comparison => Self::Term,
-            Self::Term => Self::Factor,
-            Self::Factor => Self::Unary,
-            Self::Unary => Self::Primary,
-            Self::Primary => panic!(),
-        }
-    }
+	/// Get the next higher [`Precedence`]
+	pub const fn next_higher(self) -> Self {
+		match self {
+			Self::None => Self::Assignment,
+			Self::Assignment => Self::Ternary,
+			Self::Ternary => Self::Or,
+			Self::Or => Self::And,
+			Self::And => Self::BitOr,
+			Self::BitOr => Self::BitXor,
+			Self::BitXor => Self::BitAnd,
+			Self::BitAnd => Self::Equality,
+			Self::Equality => Self::Comparison,
+			Self::Comparison => Self::Term,
+			Self::Term => Self::Factor,
+			Self::Factor => Self::Unary,
+			Self::Unary => Self::Primary,
+			Self::Primary => panic!(),
+		}
+	}
 }
