@@ -3,7 +3,7 @@
 [package]
 resolver = "3"
 name = "tinyscript"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
@@ -56,17 +56,17 @@ harness = false
 
 [dependencies]
 tinyscript-derive = { path = "derive", version = "0.1.1"}
-#parking_lot = { version = "0.12.4", default-features = false }
-spin = "0.10.0"
+spin = { version = "0.10.0", default-features = false, features = ["mutex", "rwlock", "use_ticket_mutex"] } # spin_mutex??
 thiserror = { version = "2", default-features = false }
 
 [dev-dependencies]
 criterion = "0.7.0"
+doc-comment = "0.3.3"
 rstest = "0.26.1"
 
 [features]
 default = ["std"]
-std = ["thiserror/std"]
+std = ["spin/std"]
 
 [profile.release]
 opt-level = 's'			# Optimize for size.

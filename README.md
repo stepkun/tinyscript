@@ -3,6 +3,8 @@
 __tinyscript__ is considered to ba a superset of the scripting language
 defined in [BehviorTree.CPP](https://www.behaviortree.dev/docs/guides/scripting).
 
+The implementation follows the pattern of `clox` as described in Part III of [crafting interpreters](https://craftinginterpreters.com/)
+
 ## Usage
 
 ```rust
@@ -26,9 +28,8 @@ at your option.
 
 ### Contribution
 
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you shall be dual licensed as above, without any
-additional terms or conditions.
+Any contribution intentionally submitted for inclusion in the work by you shall be dual licensed as above,
+without any additional terms or conditions.
 
 
 ## Data types

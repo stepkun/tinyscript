@@ -2,7 +2,8 @@
 #![no_std]
 #![doc = include_str!("../README.md")]
 
-//! The implementation follows the pattern of clox as described in Part III of [crafting interpreters](https://craftinginterpreters.com/)
+#[cfg(doctest)]
+doc_comment::doctest!("../README.md");
 
 #[doc(hidden)]
 extern crate alloc;
@@ -33,6 +34,7 @@ use spin::RwLock;
 // endregion:	--- modules
 
 /// Global constant for expect statements that should never happen
+#[doc(hidden)]
 pub const SHOULD_NOT_HAPPEN: &str = "should not happen";
 
 // region		--- types
