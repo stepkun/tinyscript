@@ -13,12 +13,7 @@ repository = "https://github.com/stepkun/tinyscript"
 homepage = "https://github.com/stepkun/tinyscript"
 documentation = "https://docs.rs/tinyscript"
 readme = "README.md"
-exclude = [
-    "benches/**",
-    "embedded/**",
-    "examples/**",
-    "tests/**",
-]
+exclude = ["benches/**", "embedded/**", "examples/**", "tests/**"]
 
 
 [lib]
@@ -55,8 +50,12 @@ name = "expression"
 harness = false
 
 [dependencies]
-tinyscript-derive = { path = "derive", version = "0.1.1"}
-spin = { version = "0.10.0", default-features = false, features = ["mutex", "rwlock", "use_ticket_mutex"] } # spin_mutex??
+tinyscript-derive = { path = "derive", version = "0.1.1" }
+spin = { version = "0.10.0", default-features = false, features = [
+  "mutex",
+  "rwlock",
+  "use_ticket_mutex",
+] } # spin_mutex??
 thiserror = { version = "2", default-features = false }
 
 [dev-dependencies]
@@ -66,19 +65,19 @@ rstest = "0.26.1"
 
 [features]
 default = ["std"]
-std = ["spin/std"]
+std = []
 
 [profile.release]
-opt-level = 's'			# Optimize for size.
-lto = true				# Enable Link Time Optimisation
-codegen-units = 1		# Reduced to increase optimisations
-overflow-checks = true	# useful
+opt-level = 's'        # Optimize for size.
+lto = true             # Enable Link Time Optimisation
+codegen-units = 1      # Reduced to increase optimisations
+overflow-checks = true # useful
 
 [profile.production]
-inherits="release"
-panic = 'abort'		    # Abort on panic
-strip = "symbols"	    # Strip symbols from binary
+inherits = "release"
+panic = 'abort'      # Abort on panic
+strip = "symbols"    # Strip symbols from binary
 
 [profile.samply]
 inherits = "release"
-debug = true		    # Create debug symbols for profiling
+debug = true         # Create debug symbols for profiling
