@@ -13,6 +13,8 @@ repository = "https://github.com/stepkun/tinyscript"
 homepage = "https://github.com/stepkun/tinyscript"
 documentation = "https://docs.rs/tinyscript"
 readme = "README.md"
+keywords = ["automation", "script", "scripting"]
+categories = ["development-tools"]
 exclude = ["laze*", "benches/**", "embedded/**", "examples/**", "tests/**"]
 
 
@@ -50,7 +52,7 @@ name = "expression"
 harness = false
 
 [dependencies]
-tinyscript-derive = { path = "derive", version = "0.1.1" }
+tinyscript-derive = { path = "derive", version = "0.1" }
 spin = { version = "0.10.0", default-features = false, features = [
   "mutex",
   "rwlock",
