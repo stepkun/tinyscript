@@ -47,7 +47,7 @@ fn repl() {
 					break;
 				}
 			}
-			Err(_) => todo!(),
+			Err(_) => eprintln!("could not read input"),
 		}
 	}
 }

@@ -147,7 +147,7 @@ impl Chunk {
 					ScriptingValue::String(s) => std::println!("{name:16} {pos:3} {s}"),
 				}
 			}
-			None => todo!(),
+			None => std::eprintln!("missing constant value"),
 		}
 		offset + 2
 	}

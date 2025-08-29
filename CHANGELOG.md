@@ -24,6 +24,7 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 - contribution modalities
 
 ### Fixed
+- solved open todo!()'s
 
 ### Removed
 
