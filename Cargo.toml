@@ -3,11 +3,11 @@
 [package]
 resolver = "3"
 name = "tinyscript"
-version = "0.1.5"
+version = "0.2.0"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
-description = "Tiny, C-like scripting language"
+description = "Tiny, C-like scripting language."
 rust-version = "1.86.0"
 repository = "https://github.com/stepkun/tinyscript"
 homepage = "https://github.com/stepkun/tinyscript"
@@ -52,7 +52,7 @@ name = "expression"
 harness = false
 
 [dependencies]
-tinyscript-derive = { path = "derive", version = "0.1" }
+tinyscript-derive = { path = "derive", version = "0.2" }
 spin = { version = "0.10.0", default-features = false, features = [
   "mutex",
   "rwlock",

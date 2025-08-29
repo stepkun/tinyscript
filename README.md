@@ -34,15 +34,15 @@ without any additional terms or conditions.
 
 ## Data types
 
-| Type     | Examples |
-|----------|----------|
-| Boolean  | true/false |
-| String   | 'hello world' |
-| Enum   | RED, GREEN, BLUE |
-| Numbers: |        |
-| Integer | 42 |
-| Hexadecimal | 0x01 |
-| Float   | 3.14 |
+| Type        | Examples         |
+|-------------|------------------|
+| Boolean     | true/false       |
+| String      | 'hello world'    |
+| Enum        | RED, GREEN, BLUE |
+| Numbers:    |                  |
+| Integer     | 42               |
+| Hexadecimal | 0x01             |
+| Float       | 3.14             |
 
 Note: under the hood an Enum is always interpreted as its integer value.
 
@@ -71,8 +71,8 @@ Enums must be registered to the Runtime before they can be used.
 #### Negative numbers
 
 | Operator | Description |
-|---------|---------|
-| ~       |  Negate   |
+|---------|--------------|
+| ~       |  Negate      |
 
 
 ## Statements
@@ -118,11 +118,11 @@ The resulting values of `var_a` is 10 and `var_c` is 31.
 The following operators are supported:
 
 | Operator | Assign Operator  | Description |
-|----------|---------|---------|
-| +        |  +=     | Add      |
-| -        |  -=     | Subtract |
-| *        |  *=     | Multiply |
-| /        |  /=     | Divide   |
+|----------|------------------|-------------|
+| +        |  +=              | Add         |
+| -        |  -=              | Subtract    |
+| *        |  *=              | Multiply    |
+| /        |  /=              | Divide      |
 
 These operators can be used only on Number data types, only the addition acan also be used on Strings.
 
@@ -160,16 +160,16 @@ val_c := (val_a == val_b)
 val_d := (val_a && val_b) || !val_c
 ```
 
-| Operator | Description |
-|----------|-------------|
-| &&       |  Logic and |
-| \|\|     |  Logic or |
-| !        |  Negation |
-| ==       |  Equality |
-| !=       |  Inequality |
-| <        |  Less |
-| <=       |  Less equal |
-| >        |  Greater |
+| Operator | Description    |
+|----------|----------------|
+| &&       |  Logic and     |
+| \|\|     |  Logic or      |
+| !        |  Negation      |
+| ==       |  Equality      |
+| !=       |  Inequality    |
+| <        |  Less          |
+| <=       |  Less equal    |
+| >        |  Greater       |
 | >=       |  Greater equal |
 
 

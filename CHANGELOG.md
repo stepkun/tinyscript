@@ -16,15 +16,17 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
-## [0.1.5] - 2025-??-??
+## [0.2.0] - 2025-??-??
 
 ### Added
 
 ### Changed
 - contribution modalities
+- separated error handling for trait `Environment`
 
 ### Fixed
 - solved open todo!()'s
+- non static lifetime for enum registration function
 
 ### Removed
 

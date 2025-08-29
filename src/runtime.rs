@@ -12,8 +12,8 @@ use alloc::{collections::btree_map::BTreeMap, string::String, sync::Arc};
 use spin::Mutex;
 
 use crate::{
-	Environment,
 	compiling::Parser,
+	environment::Environment,
 	error::Error,
 	execution::{Chunk, ScriptingValue, VM},
 };

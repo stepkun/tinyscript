@@ -2,7 +2,7 @@
 
 [package]
 name = "tinyscript-derive"
-version = "0.1.1"
+version = "0.2.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
@@ -11,11 +11,7 @@ description = "Procedural macros for tinyscript"
 documentation = "https://docs.rs/tinyscript-derive"
 repository = "https://github.com/stepkun/tinyscript"
 readme = "../README.md"
-exclude = [
-    "benches/**",
-    "examples/**",
-    "tests/**",
-]
+exclude = ["benches/**", "examples/**", "tests/**"]
 
 [lib]
 proc-macro = true

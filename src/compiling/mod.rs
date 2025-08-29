@@ -1,7 +1,6 @@
 // Copyright © 2025 Stephan Kunz
 
 //! Bytecode compiler for `tinyscript`
-//!
 
 mod lexer;
 mod parselets;

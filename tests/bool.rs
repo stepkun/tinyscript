@@ -2,7 +2,7 @@
 
 //! Tests of scripting equality, inequality & negation
 
-use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
+use tinyscript::{Runtime, SHOULD_NOT_HAPPEN, environment::DefaultEnvironment};
 
 use rstest::rstest;
 

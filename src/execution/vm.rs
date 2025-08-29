@@ -9,7 +9,7 @@ extern crate std;
 // region:		--- modules
 use alloc::{borrow::ToOwned, string::ToString};
 
-use crate::{Environment, Error};
+use crate::{Error, environment::Environment};
 
 use super::{Chunk, ScriptingValue, op_code::OpCode};
 // endregion:	--- modules
@@ -277,7 +277,8 @@ impl VM {
 		self.ip += 1;
 		let value_val = self.pop();
 		//let name = chunk.get_string(name_val.as_string_pos()?);
-		globals.define_env(&name_val.to_string(), value_val)
+		globals.define_env(&name_val.to_string(), value_val)?;
+		Ok(())
 	}
 
 	fn get_global(&mut self, chunk: &Chunk, globals: &dyn Environment) -> Result<(), Error> {
@@ -295,7 +296,8 @@ impl VM {
 		self.ip += 1;
 		// let name = chunk.get_string(name_val.as_string_pos()?);
 		let value_val = self.pop();
-		globals.set_env(&name_val.to_string(), value_val)
+		globals.set_env(&name_val.to_string(), value_val)?;
+		Ok(())
 	}
 
 	/// Execute a [`Chunk`] with the virtual machine,

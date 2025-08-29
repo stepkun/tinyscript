@@ -9,7 +9,8 @@ use crate::ConstString;
 // endregion:	--- modules
 
 // region:		--- Error
-/// `scripting` error type
+/// `tinyscript` error type
+#[non_exhaustive]
 #[derive(Error, Debug)]
 pub enum Error {
 	/// Did not get the expected `Token`.
@@ -51,18 +52,6 @@ pub enum Error {
 	/// Enum value is not defined.
 	#[error("could not find Enum {0} at line {1}")]
 	EnumValNotFound(ConstString, usize),
-	/// Storage for global values exceeded.
-	#[error("Variable [{0}] exceeds type limits")]
-	GlobalExceedsLimits(ConstString),
-	/// This is a type that is not knpwn in Scripting.
-	#[error("Variable [{0}] has an unknown type")]
-	GlobalHasUnknownType(ConstString),
-	/// Tried to read a non existing variable.
-	#[error("Variable [{0}] has not been defined")]
-	GlobalNotDefined(ConstString),
-	/// Type of variable is different than expected.
-	#[error("Variable [{0}] has a wrong type")]
-	GlobalWrongType(ConstString),
 	/// Nil does not allow anything.
 	#[error("Value is 'Nil' which does not allow any operation")]
 	NilValue,
@@ -93,6 +82,10 @@ pub enum Error {
 	/// An unknown `OpCode`.
 	#[error("unknown Operation Code")]
 	UnknownOpCode,
+
+	/// Pass through from `crate::environment::Error`
+	#[error("{0}")]
+	Env(#[from] crate::environment::Error),
 
 	/// A really unexpected error happened.
 	#[error("unexpected [{0}] in file [{1}] at line [{2}]")]

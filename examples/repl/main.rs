@@ -3,7 +3,7 @@
 
 use std::io::{Write, stdin, stdout};
 
-use tinyscript::{DefaultEnvironment, Runtime};
+use tinyscript::{Runtime, environment::DefaultEnvironment};
 
 const PROMPT: &str = "> ";
 
