@@ -53,6 +53,22 @@ pub enum Error {
 		/// Name of the variable
 		name: ConstString,
 	},
+
+	/// An external error when setting the variable.
+	EnvVarSet {
+		/// Name of the variable
+		name: ConstString,
+		/// Cause of error
+		cause: ConstString,
+	},
+
+	/// An error when casting the type of the variable.
+	EnvVarTypeCast {
+		/// Name of the variable
+		name: ConstString,
+		/// Expected type ofthe variable
+		var_type: ConstString,
+	},
 }
 
 impl core::error::Error for Error {
@@ -74,6 +90,8 @@ impl core::fmt::Debug for Error {
 			Self::EnvVarNotDefined { name } => write!(f, "EnvVarNotDefined({name})"),
 			Self::EnvVarUnknownType { name } => write!(f, "EnvVarlUnknownTType({name})"),
 			Self::EnvVarWrongType { name } => write!(f, "EnvVarWrongType({name})"),
+			Self::EnvVarSet { name, cause } => write!(f, "EnvVarSet({name}, {cause})"),
+			Self::EnvVarTypeCast { name, var_type } => write!(f, "EnvVarTypeCast({name}, {var_type})"),
 		}
 	}
 }
@@ -92,6 +110,10 @@ impl core::fmt::Display for Error {
 					"the type of the environment variable {name} does not match its former definition"
 				)
 			}
+			Self::EnvVarSet { name, cause } => {
+				write!(f, "setting environment variable {name} failed: {cause}")
+			}
+			Self::EnvVarTypeCast { name, var_type } => write!(f, "cast of variable {name} to {var_type} failed"),
 		}
 	}
 }

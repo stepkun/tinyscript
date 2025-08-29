@@ -8,7 +8,7 @@ The implementation follows the pattern of `clox` as described in Part III of [cr
 ## Usage
 
 ```rust
-use tinyscript::{Runtime, DefaultEnvironment};
+use tinyscript::{Runtime, environment::DefaultEnvironment};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut runtime = Runtime::default();
