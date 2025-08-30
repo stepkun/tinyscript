@@ -6,7 +6,7 @@
 use std::time::Duration;
 
 use criterion::{Criterion, criterion_group, criterion_main};
-use tinyscript::{DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
+use tinyscript::{environment::DefaultEnvironment, Runtime, SHOULD_NOT_HAPPEN};
 
 const SAMPLES: usize = 100;
 const ITERATIONS: usize = 100;
