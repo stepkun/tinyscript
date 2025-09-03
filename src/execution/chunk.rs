@@ -29,13 +29,13 @@ pub struct Chunk {
 }
 
 impl Chunk {
-	/// Access code
+	/// Access code.
 	#[must_use]
 	pub const fn code(&self) -> &Vec<u8> {
 		&self.code
 	}
 
-	/// Finalizes the [`Chunk`] by shrinking al [`Vec`]'s
+	/// Finalizes the [`Chunk`] by shrinking al [`Vec`]'s.
 	pub(crate) fn finalize(&mut self) {
 		self.code.shrink_to_fit();
 		self.lines.shrink_to_fit();
@@ -53,8 +53,9 @@ impl Chunk {
 		self.code[pos] = byte;
 	}
 
-	/// Add a Value to the Value storage returning its position in the storage
+	/// Add a Value to the Value storage returning its position in the storage.
 	/// # Errors
+	/// - on stack overflow
 	#[allow(clippy::cast_possible_truncation)]
 	pub(crate) fn add_constant(&mut self, value: ScriptingValue) -> Result<u8, Error> {
 		if self.values.len() < u8::MAX as usize {
@@ -66,7 +67,7 @@ impl Chunk {
 		}
 	}
 
-	/// Read a [`ScriptingValue`] from the [`ScriptingValue`] storage
+	/// Read a [`ScriptingValue`] from the [`ScriptingValue`] storage.
 	#[must_use]
 	pub(super) fn read_constant(&self, pos: u8) -> ScriptingValue {
 		let offset = usize::from(pos);
@@ -75,7 +76,7 @@ impl Chunk {
 			.map_or_else(|| todo!("pos: {}", pos), ToOwned::to_owned)
 	}
 
-	/// Disassemble chunk
+	/// Disassemble chunk.
 	#[cfg(feature = "std")]
 	pub fn disassemble(&self, name: &str) {
 		let mut offset = 0usize;
@@ -85,7 +86,7 @@ impl Chunk {
 		}
 	}
 
-	/// Disassemble a single instruction
+	/// Disassemble an instruction.
 	#[cfg(feature = "std")]
 	fn disassemble_instruction(&self, offset: usize) -> usize {
 		std::print!("{offset:04} ");
@@ -126,14 +127,14 @@ impl Chunk {
 		}
 	}
 
-	/// single byte instruction
+	/// Single byte instruction.
 	#[cfg(feature = "std")]
 	fn simple_instruction(name: &str, offset: usize) -> usize {
 		std::println!("{name:16}");
 		offset + 1
 	}
 
-	/// constant instruction
+	/// Constant instruction.
 	#[cfg(feature = "std")]
 	fn constant_instruction(&self, name: &str, offset: usize) -> usize {
 		match self.code.get(offset + 1) {
@@ -152,20 +153,18 @@ impl Chunk {
 		offset + 2
 	}
 
-	/// constant instruction
+	/// Jump instruction.
 	#[cfg(feature = "std")]
 	fn jump_instruction(&self, name: &str, offset: usize) -> usize {
-		use crate::SHOULD_NOT_HAPPEN;
-
 		let target = (usize::from(
 			self.code
 				.get(offset + 1)
-				.expect(SHOULD_NOT_HAPPEN)
+				.expect("missing first byte of jump target")
 				.to_owned(),
 		) << 8) + usize::from(
 			self.code
 				.get(offset + 2)
-				.expect(SHOULD_NOT_HAPPEN)
+				.expect("missing second byte of jump target")
 				.to_owned(),
 		);
 

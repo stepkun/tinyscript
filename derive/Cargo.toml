@@ -2,7 +2,7 @@
 
 [package]
 name = "tinyscript-derive"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 license = "MIT OR Apache-2.0"
 edition = "2024"

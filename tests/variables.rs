@@ -1,8 +1,10 @@
+//! Tests of scripting operators
 // Copyright © 2025 Stephan Kunz
 
-//! Tests of scripting operators
+#![allow(missing_docs)]
+#![allow(clippy::unwrap_used)]
 
-use tinyscript::{Runtime, SHOULD_NOT_HAPPEN, environment::DefaultEnvironment};
+use tinyscript::{Runtime, environment::DefaultEnvironment};
 
 use rstest::rstest;
 
@@ -17,9 +19,7 @@ fn define_globals(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -32,9 +32,7 @@ fn change_globals(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -49,9 +47,7 @@ fn assignment_with_change(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -65,9 +61,7 @@ fn assignment_with_complex_change(#[case] input: &str, #[case] expected: &[u8]) 
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -83,8 +77,6 @@ fn complex_examples(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }

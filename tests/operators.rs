@@ -1,8 +1,10 @@
+//! Tests of scripting operators
 // Copyright © 2025 Stephan Kunz
 
-//! Tests of scripting operators
+#![allow(missing_docs)]
+#![allow(clippy::unwrap_used)]
 
-use tinyscript::{Runtime, SHOULD_NOT_HAPPEN, environment::DefaultEnvironment};
+use tinyscript::{Runtime, environment::DefaultEnvironment};
 
 use rstest::rstest;
 
@@ -19,9 +21,7 @@ fn add(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -33,9 +33,7 @@ fn subtract(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -51,9 +49,7 @@ fn multiply(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -69,9 +65,7 @@ fn divide(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -83,9 +77,7 @@ fn precedence(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -108,9 +100,7 @@ fn equality(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -132,9 +122,7 @@ fn inequality(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -163,9 +151,7 @@ fn comparison(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
 
@@ -180,8 +166,6 @@ fn negate(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }

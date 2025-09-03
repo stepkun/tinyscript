@@ -1,7 +1,5 @@
-// Copyright © 2025 Stephan Kunz
-
 //! Derive macro [`ScriptEnum`] for `tinyscript`
-//!
+// Copyright © 2025 Stephan Kunz
 
 #[doc(hidden)]
 extern crate proc_macro;

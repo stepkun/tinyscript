@@ -16,16 +16,13 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
-## [0.2.1] - 2025-??-??
-
-### Added
+## [0.2.1] - 2025-09-03
 
 ### Changed
+- replaced `expect(SHOULD_NOT_HAPPEN)` with better error handling
 
 ### Fixed
 - benchmarks
-
-### Removed
 
 ## [0.2.0] - 2025-08-29
 

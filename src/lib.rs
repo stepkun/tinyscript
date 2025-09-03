@@ -26,10 +26,6 @@ pub use tinyscript_derive::ScriptEnum;
 use alloc::{sync::Arc, vec::Vec};
 // endregion:	--- modules
 
-/// Global constant for expect statements that should never happen
-#[doc(hidden)]
-pub const SHOULD_NOT_HAPPEN: &str = "should not happen";
-
 // region		--- types
 /// An immutable thread safe `String` type
 /// see: [Logan Smith](https://www.youtube.com/watch?v=A4cKi7PTJSs).

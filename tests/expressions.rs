@@ -1,8 +1,10 @@
+//! Tests of scripting expressions
 // Copyright © 2025 Stephan Kunz
 
-//! Tests of scripting expressions
+#![allow(missing_docs)]
+#![allow(clippy::unwrap_used)]
 
-use tinyscript::{Runtime, SHOULD_NOT_HAPPEN, environment::DefaultEnvironment};
+use tinyscript::{Runtime, environment::DefaultEnvironment};
 
 use rstest::rstest;
 
@@ -14,8 +16,6 @@ fn expressions(#[case] input: &str, #[case] expected: &[u8]) {
 	let mut env = DefaultEnvironment::default();
 	let mut runtime = Runtime::default();
 
-	runtime
-		.run(input, &mut env)
-		.expect(SHOULD_NOT_HAPPEN);
+	runtime.run(input, &mut env).unwrap();
 	assert_eq!(runtime.stdout(), expected);
 }
