@@ -86,7 +86,7 @@ impl Runtime {
 	/// - if
 	pub fn execute(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
 		#[cfg(not(feature = "std"))]
-		let res = self.vm.run(chunk, globals);
+		let res = self.vm.run(chunk, globals)?;
 		#[cfg(feature = "std")]
 		let res = self.vm.run(chunk, globals, &mut self.stdout)?;
 		Ok(res)

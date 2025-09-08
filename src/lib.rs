@@ -15,6 +15,7 @@ pub mod execution;
 pub mod runtime;
 
 // flatten
+pub use environment::DefaultEnvironment;
 pub use error::{Error, Result};
 pub use execution::Chunk;
 pub use runtime::{Runtime, SharedRuntime};
