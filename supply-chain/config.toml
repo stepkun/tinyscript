@@ -151,14 +151,6 @@ criteria = "safe-to-deploy"
 version = "2.0.106"
 criteria = "safe-to-deploy"
 
-[[exemptions.thiserror]]
-version = "2.0.16"
-criteria = "safe-to-deploy"
-
-[[exemptions.thiserror-impl]]
-version = "2.0.16"
-criteria = "safe-to-deploy"
-
 [[exemptions.tinyscript]]
 version = "0.2.1"
 criteria = "safe-to-deploy"
@@ -213,42 +205,6 @@ criteria = "safe-to-run"
 
 [[exemptions.windows-sys]]
 version = "0.60.2"
-criteria = "safe-to-run"
-
-[[exemptions.windows-targets]]
-version = "0.53.3"
-criteria = "safe-to-run"
-
-[[exemptions.windows_aarch64_gnullvm]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_aarch64_msvc]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_i686_gnu]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_i686_gnullvm]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_i686_msvc]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_x86_64_gnu]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_x86_64_gnullvm]]
-version = "0.53.0"
-criteria = "safe-to-run"
-
-[[exemptions.windows_x86_64_msvc]]
-version = "0.53.0"
 criteria = "safe-to-run"
 
 [[exemptions.winnow]]

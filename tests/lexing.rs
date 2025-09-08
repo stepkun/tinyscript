@@ -7,7 +7,7 @@
 use std::collections::BTreeMap;
 
 use rstest::rstest;
-use tinyscript::compiling::{Lexer, TokenKind};
+use tinyscript::compilation::{Lexer, TokenKind};
 
 #[rstest]
 #[case("=", TokenKind::Equal)]
@@ -52,7 +52,7 @@ fn lexing_token(#[case] input: &str, #[case] expected: TokenKind) {
 	let mut enums: BTreeMap<String, i8> = BTreeMap::default();
 	enums.insert("RED".to_string(), 0);
 	let mut lexer = Lexer::new(&enums, input);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, expected);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), expected);
 	assert!(lexer.next().is_none());
 }
 
@@ -61,34 +61,34 @@ fn lexing_token(#[case] input: &str, #[case] expected: TokenKind) {
 fn lexing_tokens(tokens: &str) {
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::ColonEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Equal);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Plus);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Minus);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Star);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Slash);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::PlusEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::MinusEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::StarEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::SlashEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Semicolon);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Bang);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Ampersand);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Pipe);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Caret);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Tilde);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::And);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Or);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::EqualEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::BangEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Less);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::LessEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Greater);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::GreaterEqual);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Colon);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::QMark);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::LeftParen);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::RightParen);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::ColonEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Equal);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Plus);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Minus);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Star);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Slash);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::PlusEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::MinusEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::StarEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::SlashEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Semicolon);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Bang);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Ampersand);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Pipe);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Caret);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Tilde);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::And);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Or);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::EqualEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::BangEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Less);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::LessEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Greater);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::GreaterEqual);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Colon);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::QMark);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::LeftParen);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::RightParen);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -106,9 +106,9 @@ fn lexing_keywords() {
 	let tokens = "true false print";
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::True);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::False);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Print);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::True);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::False);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Print);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -118,9 +118,9 @@ fn lexing_idents() {
 	let tokens = "a_name _another_name _aThirdName_";
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Ident);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Ident);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Ident);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Ident);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Ident);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Ident);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -130,11 +130,11 @@ fn lexing_numbers() {
 	let tokens = "123 123.0 123.456 0.123 0x123";
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::IntNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::FloatNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::FloatNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::FloatNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::HexNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::IntNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::FloatNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::FloatNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::FloatNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::HexNumber);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -144,10 +144,10 @@ fn lexing_hex() {
 	let tokens = "0x123 0xABC 0xabc 0xa1b2c3";
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::HexNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::HexNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::HexNumber);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::HexNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::HexNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::HexNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::HexNumber);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::HexNumber);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -157,8 +157,8 @@ fn lexing_strings() {
 	let tokens = "'teststring' 'another_string'";
 	let enums: BTreeMap<String, i8> = BTreeMap::default();
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::String);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::String);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::String);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::String);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }
@@ -173,9 +173,9 @@ fn lexing_enums() {
 	enums.insert("Third".into(), 3);
 
 	let mut lexer = Lexer::new(&enums, tokens);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Enum);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Enum);
-	assert_eq!(lexer.next().unwrap().unwrap().kind, TokenKind::Enum);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Enum);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Enum);
+	assert_eq!(lexer.next().unwrap().unwrap().kind(), TokenKind::Enum);
 	assert!(lexer.next().is_none());
 	assert!(lexer.next().is_none());
 }

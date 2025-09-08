@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Parser for `tinyscript` implemented as a [Pratt-Parser](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html)
+//! [`Parser`] is implemented as a [Pratt-Parser](https://matklad.github.io/2020/04/13/simple-but-powerful-pratt-parsing.html)
 //! You should also read the articel by [Robert Nystrom](https://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/)
 //!
 //! Implementation is inspired by
@@ -48,12 +47,12 @@ use alloc::{
 };
 
 use crate::{
-	Error,
-	compiling::Lexer,
+	compilation::Lexer,
 	execution::{Chunk, op_code::OpCode},
 };
 
 use super::{
+	error::{CompilationError, CompilationResult},
 	parselets::{
 		AssignmentParselet, BinaryParselet, GroupingParselet, InfixParselet, LiteralParselet, LogicParselet, PrefixParselet,
 		UnaryParselet, ValueParselet,
@@ -64,13 +63,15 @@ use super::{
 // endregion:	--- modules
 
 // region:		--- Parser
-/// Parser
+/// Parser implementation.
 pub struct Parser {
+	/// Map of prefix parselets.
 	prefix_parselets: BTreeMap<TokenKind, Arc<dyn PrefixParselet>>,
+	/// Map of infix parselets.
 	infix_parselets: BTreeMap<TokenKind, Arc<dyn InfixParselet>>,
-	/// current handled Token
+	/// Current handled Token.
 	current: Token,
-	/// preview on next Token
+	/// Preview on next Token.
 	next: Token,
 }
 
@@ -204,7 +205,7 @@ impl Parser {
 	/// # Errors
 	/// - passes [`Lexer`] errors through
 	/// - if it could not create a proper [`Chunk`]
-	pub fn parse(&mut self, enums: &BTreeMap<String, i8>, source_code: &str) -> Result<Chunk, Error> {
+	pub fn parse(&mut self, enums: &BTreeMap<String, i8>, source_code: &str) -> CompilationResult<Chunk> {
 		let mut chunk = Chunk::default();
 		let mut lexer = Lexer::new(enums, source_code);
 
@@ -238,7 +239,7 @@ impl Parser {
 	/// Advance to the next token
 	/// # Errors
 	/// passthrough of [`Lexer`] errors
-	pub(super) fn advance(&mut self, lexer: &mut Lexer) -> Result<(), Error> {
+	pub(super) fn advance(&mut self, lexer: &mut Lexer) -> CompilationResult<()> {
 		self.current = self.next.clone();
 		let tmp = lexer.next();
 		if let Some(token) = tmp {
@@ -254,15 +255,15 @@ impl Parser {
 	/// Consume the next token if it has the expected kind
 	/// # Errors
 	/// if next token does not have the expected kind
-	pub(super) fn consume(&mut self, lexer: &mut Lexer, expected: TokenKind) -> Result<(), Error> {
+	pub(super) fn consume(&mut self, lexer: &mut Lexer, expected: TokenKind) -> CompilationResult<()> {
 		if self.next.kind == expected {
 			self.advance(lexer)
 		} else {
-			Err(Error::ExpectedToken(
-				expected.to_string().into(),
-				self.next.kind.to_string().into(),
-				self.next.line,
-			))
+			Err(CompilationError::TokenExpected {
+				expected: expected.to_string().into(),
+				found: self.next.kind.to_string().into(),
+				pos: self.next.line,
+			})
 		}
 	}
 
@@ -298,7 +299,7 @@ impl Parser {
 		chunk.patch(byte2, patch_pos + 1);
 	}
 
-	pub(super) fn statement(&mut self, lexer: &mut Lexer, chunk: &mut Chunk) -> Result<(), Error> {
+	pub(super) fn statement(&mut self, lexer: &mut Lexer, chunk: &mut Chunk) -> CompilationResult<()> {
 		if self.next.kind == TokenKind::Print {
 			self.advance(lexer)?;
 			self.expression(lexer, chunk)?;
@@ -320,22 +321,26 @@ impl Parser {
 		Ok(())
 	}
 
-	pub(super) fn expression(&mut self, lexer: &mut Lexer, chunk: &mut Chunk) -> Result<(), Error> {
+	pub(super) fn expression(&mut self, lexer: &mut Lexer, chunk: &mut Chunk) -> CompilationResult<()> {
 		self.with_precedence(lexer, Precedence::Assignment, chunk)
 	}
 
+	#[allow(clippy::expect_used)]
 	pub(super) fn with_precedence(
 		&mut self,
 		lexer: &mut Lexer,
 		precedence: Precedence,
 		chunk: &mut Chunk,
-	) -> Result<(), Error> {
+	) -> CompilationResult<()> {
 		self.advance(lexer)?;
 
 		let token = self.current();
 		let prefix_opt = self.prefix_parselets.get(&token.kind);
 		if prefix_opt.is_none() {
-			return Err(Error::ExpressionExpected(token.line));
+			return Err(CompilationError::ExpressionExpected {
+				token: token.kind.to_string().into(),
+				pos: token.line,
+			});
 		}
 		let prefix_parselet = prefix_opt.expect("should not fail").clone();
 		prefix_parselet.parse(lexer, self, chunk, token)?;

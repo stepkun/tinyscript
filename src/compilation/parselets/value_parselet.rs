@@ -1,13 +1,11 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `ValueParselet` for `tinyscript` analyzes and handles value tokens like numbers
-//!
+//! [`ValueParselet`] analyzes and handles value tokens like numbers.
 
 // region:   	--- modules
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::{CompilationError, CompilationResult},
 		token::{Token, TokenKind},
 	},
 	execution::{Chunk, ScriptingValue, op_code::OpCode},
@@ -19,11 +17,14 @@ use super::PrefixParselet;
 pub struct ValueParselet;
 
 impl PrefixParselet for ValueParselet {
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error> {
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> CompilationResult<()> {
 		match token.kind {
 			TokenKind::Enum => {
 				let Some(value) = lexer.enums().get(&token.origin) else {
-					return Err(Error::EnumValNotFound(token.origin.into(), token.line));
+					return Err(CompilationError::EnumValNotFound {
+						value: token.origin.into(),
+						pos: token.line,
+					});
 				};
 				let offset = chunk.add_constant(ScriptingValue::Int64(i64::from(*value)))?;
 				parser.emit_bytes(OpCode::Constant as u8, offset, chunk);
@@ -33,7 +34,10 @@ impl PrefixParselet for ValueParselet {
 				let double: f64 = match token.origin.parse() {
 					Ok(n) => n,
 					Err(_) => {
-						return Err(Error::ParseNumber(token.origin.into(), token.line));
+						return Err(CompilationError::ParseNumber {
+							token: token.origin.into(),
+							pos: token.line,
+						});
 					}
 				};
 
@@ -45,7 +49,10 @@ impl PrefixParselet for ValueParselet {
 				// remove the '0x' before parsing
 				let literal = token.origin.trim_start_matches("0x");
 				let Ok(value) = i64::from_str_radix(literal, 16) else {
-					return Err(Error::ParseHex(literal.into(), token.line));
+					return Err(CompilationError::ParseHex {
+						token: literal.into(),
+						pos: token.line,
+					});
 				};
 				let offset = chunk.add_constant(ScriptingValue::Int64(value))?;
 				parser.emit_bytes(OpCode::Constant as u8, offset, chunk);
@@ -53,7 +60,10 @@ impl PrefixParselet for ValueParselet {
 			}
 			TokenKind::IntNumber => {
 				let Ok(value) = token.origin.parse::<i64>() else {
-					return Err(Error::ParseInt(token.origin.into(), token.line));
+					return Err(CompilationError::ParseInt {
+						token: token.origin.into(),
+						pos: token.line,
+					});
 				};
 				let offset = chunk.add_constant(ScriptingValue::Int64(value))?;
 				parser.emit_bytes(OpCode::Constant as u8, offset, chunk);
@@ -64,7 +74,10 @@ impl PrefixParselet for ValueParselet {
 				parser.emit_bytes(OpCode::Constant as u8, offset, chunk);
 				Ok(())
 			}
-			_ => Err(Error::Unreachable(file!().into(), line!())),
+			_ => Err(CompilationError::Unreachable {
+				file: file!().into(),
+				line: line!(),
+			}),
 		}
 	}
 }

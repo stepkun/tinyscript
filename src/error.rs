@@ -1,97 +1,86 @@
 // Copyright © 2025 Stephan Kunz
+//! `tinyscript`s external errors, passes through the internal errors.
 
-//! `tinyscript` errors
+use crate::{ConstString, compilation::CompilationError, execution::ExecutionError};
 
-// region		--- modules
-use thiserror::Error;
+/// Shortcut for tinyscript's Result<T, E> type
+pub type Result<T> = core::result::Result<T, Error>;
 
-use crate::ConstString;
-// endregion:	--- modules
-
-// region:		--- Error
-/// `tinyscript` error type
-#[non_exhaustive]
-#[derive(Error, Debug)]
+/// Error cases of the runtime
 pub enum Error {
-	/// Did not get the expected `Token`.
-	#[error("Expecting {0} found {1} at line {2}")]
-	ExpectedToken(ConstString, ConstString, usize),
-	/// Whatever it is: It is not an expression.
-	#[error("expression expected at line {0}")]
-	ExpressionExpected(usize),
-	/// Compile failed to create a `Chunk`.
-	#[error("could not create Chunk for VM")]
-	NoChunk,
-	/// Not a hex number.
-	#[error("could not parse HexNumber {0} at line {1}")]
-	ParseHex(ConstString, usize),
-	/// Not an int number.
-	#[error("could not parse IntNumber {0} at line {1}")]
-	ParseInt(ConstString, usize),
-	/// Not a float number.
-	#[error("could not parse Number {0} at line {1}")]
-	ParseNumber(ConstString, usize),
-	/// Exceeded the size of storage for values.
-	#[error("Value storage is full")]
-	ToManyValues,
-	/// This Char should not be here.
-	#[error("unexpected character {0} at line {1}")]
-	UnexpectedChar(ConstString, usize),
-	/// Got an unexpected `Token`.
-	#[error("unexpected Token at line {0}")]
-	UnexpectedToken(usize),
-	/// Missing string termination.
-	#[error("unterminated String {0} at line {1}")]
-	UnterminatedString(ConstString, usize),
-	/// No arithemetic with boolean for now.
-	#[error("Boolean values do not allow arithmetic operations")]
-	BoolNoArithmetic,
+	/// Passthrough compilation errors.
+	Compilation {
+		/// The original error.
+		source: CompilationError,
+	},
+	/// Passthrough execution errors.
+	Execution {
+		/// The original error.
+		source: ExecutionError,
+	},
 	/// Tried to redefine an enum value.
-	#[error("Enum variant [{0}] already exists with value [{1}] new value: [{2}]")]
-	DuplicateEnumVariant(ConstString, i8, i8),
-	/// Enum value is not defined.
-	#[error("could not find Enum {0} at line {1}")]
-	EnumValNotFound(ConstString, usize),
-	/// Nil does not allow anything.
-	#[error("Value is 'Nil' which does not allow any operation")]
-	NilValue,
+	DuplicateEnumVariant {
+		/// Name of the enum value.
+		name: ConstString,
+		/// Previously defined value.
+		old: i8,
+		/// Now defined value.
+		new: i8,
+	},
 	/// Expected Boolean, got something else.
-	#[error("Value is not a Boolean type")]
-	NoBoolean,
-	/// Comparisons (greater, less) only with numbers
-	#[error("comparing Values needs two numeric types")]
-	NoComparison,
-	/// Expected Double, got something else.
-	#[error("Value is not a Double type")]
-	NoDouble,
-	/// Expected Integer, got something else.
-	#[error("Value is not an Integer type")]
-	NoInteger,
-	/// Expected String, got something else.
-	#[error("Value is not a String type")]
-	NoString,
-	/// Expected Number, got something else.
-	#[error("Value is not a number type")]
-	NoNumber,
-	/// Strings only allow additions.
-	#[error("to Strings you can only 'ADD' something")]
-	OnlyAdd,
-	/// Stack of values exceeded.
-	#[error("Value stack overflow")]
-	StackOverflow,
-	/// An unknown `OpCode`.
-	#[error("unknown Operation Code")]
-	UnknownOpCode,
-
-	/// Pass through from `crate::environment::Error`
-	#[error("{0}")]
-	Env(#[from] crate::environment::Error),
-
-	/// A really unexpected error happened.
-	#[error("unexpected [{0}] in file [{1}] at line [{2}]")]
-	Unexpected(ConstString, ConstString, u32),
-	/// This code line never should have been reached.
-	#[error("{0} at line {1} should be unreachable")]
-	Unreachable(ConstString, u32),
+	NoBoolean {
+		/// The faulty value.
+		value: ConstString,
+	},
 }
-// region:		--- Error
+
+/// Only a source implemaentation needed.
+impl core::error::Error for Error {
+	fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
+		None
+	}
+
+	// fn cause(&self) -> Option<&dyn core::error::Error> {
+	//  	self.source()
+	// }
+
+	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
+}
+
+impl core::fmt::Debug for Error {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		match self {
+			Self::Compilation { source } => write!(f, "Compilation({source:?})"),
+			Self::Execution { source } => write!(f, "Execution({source:?})"),
+			Self::DuplicateEnumVariant { name, old, new } => {
+				write!(f, "DuplicateEnumVariant(name: {name}, old: {old}, new: {new})")
+			}
+			Self::NoBoolean { value } => write!(f, "NoBoolean({value})"),
+		}
+	}
+}
+
+impl core::fmt::Display for Error {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		match self {
+			Self::Compilation { source } => write!(f, "compilation error: {source}"),
+			Self::Execution { source } => write!(f, "execution error:{source}"),
+			Self::DuplicateEnumVariant { name, old, new } => {
+				write!(f, "enum variant {name} already exists with value {old} new value: {new}")
+			}
+			Self::NoBoolean { value } => write!(f, "expected boolean, got {value}"),
+		}
+	}
+}
+
+impl From<CompilationError> for Error {
+	fn from(error: CompilationError) -> Self {
+		Self::Compilation { source: error }
+	}
+}
+
+impl From<ExecutionError> for Error {
+	fn from(error: ExecutionError) -> Self {
+		Self::Execution { source: error }
+	}
+}

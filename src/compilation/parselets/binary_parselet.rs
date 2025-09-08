@@ -1,12 +1,10 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `BinaryParselet` for `tinyscript` analyzses and handles the binary expressions
-//!
+//! [`BinaryParselet`] analyzses and handles the binary expressions.
 
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::{CompilationError, CompilationResult},
 		precedence::Precedence,
 		token::{Token, TokenKind},
 	},
@@ -26,7 +24,7 @@ impl BinaryParselet {
 }
 
 impl InfixParselet for BinaryParselet {
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> Result<(), Error> {
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		let kind = parser.current().kind;
 		parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
 		match kind {
@@ -70,7 +68,10 @@ impl InfixParselet for BinaryParselet {
 				parser.emit_byte(OpCode::Divide as u8, chunk);
 				Ok(())
 			}
-			_ => Err(Error::Unreachable(file!().into(), line!())),
+			_ => Err(CompilationError::Unreachable {
+				file: file!().into(),
+				line: line!(),
+			}),
 		}
 	}
 

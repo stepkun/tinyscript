@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Op-Code implementation for `tinyscript` bytecode
+//! [`OpCode`] implementation for the bytecode [`Chunk`](crate::execution::Chunk).
 
 /// The available instructions for the virtual machine-
 #[derive(Debug)]

@@ -1,22 +1,18 @@
 // Copyright © 2025 Stephan Kunz
-
-//! A universal `Value` type for `tinyscript`
+//! A universal `Value` type implementation.
 
 #[doc(hidden)]
 extern crate alloc;
 
-// region:		--- modules
-use alloc::string::String;
+use alloc::string::{String, ToString};
 use core::{
 	fmt::{Debug, Display, Formatter},
 	str::FromStr,
 };
 
-use crate::Error;
-// endregion:	--- modules
+use crate::execution::{ExecutionError, ExecutionResult};
 
-// region:		--- Value
-/// Value type to allow storing different kinds of values
+/// Value type to allow storing different kinds of values.
 #[derive(Clone, Debug)]
 pub enum ScriptingValue {
 	/// Nil signals the absence of a `Value`
@@ -44,7 +40,7 @@ impl Display for ScriptingValue {
 }
 
 impl FromStr for ScriptingValue {
-	type Err = Error;
+	type Err = ExecutionError;
 
 	fn from_str(s: &str) -> Result<Self, Self::Err> {
 		// extern crate std;
@@ -61,20 +57,32 @@ impl FromStr for ScriptingValue {
 	}
 }
 
+impl TryFrom<ScriptingValue> for bool {
+	type Error = crate::Error;
+
+	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
+		let val = value.as_bool()?;
+		Ok(val)
+	}
+}
+
 impl ScriptingValue {
 	/// Create a `Nil` value.
 	#[must_use]
-	pub const fn nil() -> Self {
+	pub(crate) const fn nil() -> Self {
 		Self::Nil()
 	}
 
 	/// Return the boolean value.
+	/// Internal use only.
 	/// # Errors
-	/// if it is not a boolean type
-	pub const fn as_bool(&self) -> Result<bool, Error> {
+	/// - if it is not a boolean type
+	pub(crate) fn as_bool(&self) -> ExecutionResult<bool> {
 		match self {
 			Self::Boolean(b) => Ok(*b),
-			_ => Err(Error::NoBoolean),
+			_ => Err(ExecutionError::NoBoolean {
+				value: self.to_string().into(),
+			}),
 		}
 	}
 
@@ -84,4 +92,3 @@ impl ScriptingValue {
 		matches!(self, Self::Boolean(_))
 	}
 }
-// endregion:	--- Value

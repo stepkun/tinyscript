@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Bytecode implementation for `tinyscript`
+//! Bytecode [`Chunk`] implementation.
 
 #[doc(hidden)]
 #[cfg(feature = "std")]
@@ -9,7 +8,7 @@ extern crate std;
 // region:      --- modules
 use alloc::{borrow::ToOwned, vec::Vec};
 
-use crate::Error;
+use crate::compilation::{CompilationError, CompilationResult};
 
 use super::ScriptingValue;
 
@@ -55,15 +54,15 @@ impl Chunk {
 
 	/// Add a Value to the Value storage returning its position in the storage.
 	/// # Errors
-	/// - on stack overflow
+	/// - on storage overflow
 	#[allow(clippy::cast_possible_truncation)]
-	pub(crate) fn add_constant(&mut self, value: ScriptingValue) -> Result<u8, Error> {
+	pub(crate) fn add_constant(&mut self, value: ScriptingValue) -> CompilationResult<u8> {
 		if self.values.len() < u8::MAX as usize {
 			self.values.push(value);
 			let pos = self.values.len() - 1;
 			Ok(pos as u8)
 		} else {
-			Err(Error::StackOverflow)
+			Err(CompilationError::ConstantStorageOverflow)
 		}
 	}
 
@@ -155,6 +154,7 @@ impl Chunk {
 
 	/// Jump instruction.
 	#[cfg(feature = "std")]
+	#[allow(clippy::expect_used)]
 	fn jump_instruction(&self, name: &str, offset: usize) -> usize {
 		let target = (usize::from(
 			self.code

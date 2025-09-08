@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Precedence definitions for `tinyscript` Pratt-Parser
+//! Precedence definitions for the Pratt-[`Parser`](crate::compilation::Parser)
 //!
 //! Defines the different precedence levels used by the infix parsers.
 //! These determine how a series of infix expressions will be grouped.
@@ -8,7 +7,6 @@
 //! because "*" has higher precedence than "+" and "-".
 //! Inn case of same precedence the source is parsed from left to right.
 //! Here a bigger enum value is higher precedence.
-//!
 
 /// Precedence levels
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]

@@ -4,7 +4,7 @@
 
 use tinyscript::{
 	Runtime,
-	compiling::{Lexer, Parser},
+	compilation::{Lexer, Parser},
 	execution::VM,
 };
 

@@ -1,12 +1,10 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `LiteralParselet` for `tinyscript` handles any literal like 'true' and 'false'
-//!
+//! [`LiteralParselet`] handles any language literal like 'true' and 'false'
 
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::{CompilationError, CompilationResult},
 		token::{Token, TokenKind},
 	},
 	execution::{Chunk, op_code::OpCode},
@@ -17,7 +15,7 @@ use super::PrefixParselet;
 pub struct LiteralParselet;
 
 impl PrefixParselet for LiteralParselet {
-	fn parse(&self, _lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> Result<(), Error> {
+	fn parse(&self, _lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		let kind = parser.current().kind;
 
 		match kind {
@@ -33,7 +31,10 @@ impl PrefixParselet for LiteralParselet {
 				parser.emit_byte(OpCode::True as u8, chunk);
 				Ok(())
 			}
-			_ => Err(Error::Unreachable(file!().into(), line!())),
+			_ => Err(CompilationError::Unreachable {
+				file: file!().into(),
+				line: line!(),
+			}),
 		}
 	}
 }

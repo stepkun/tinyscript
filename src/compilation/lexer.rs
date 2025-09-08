@@ -1,21 +1,19 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Lexer for `tinyscript`
+//! [`Lexer`] implementation.
 //!
 //! Implementation is heavily inspired by
 //! - Jon Gjengsets [video](https://www.youtube.com/watch?v=mNOLaw-_Buc) & [example](https://github.com/jonhoo/lox/blob/master/src/lex.rs)
-//!
-
-use core::cmp::min;
 
 use alloc::{
 	collections::btree_map::BTreeMap,
 	string::{String, ToString},
 };
+use core::cmp::min;
 
-use crate::Error;
-
-use super::token::{Token, TokenKind};
+use super::{
+	error::{CompilationError, CompilationResult},
+	token::{Token, TokenKind},
+};
 
 /// Enum to handle multi charakter tokens
 enum Started {
@@ -69,7 +67,7 @@ impl<'a> Lexer<'a> {
 }
 
 impl Iterator for Lexer<'_> {
-	type Item = Result<Token, Error>;
+	type Item = CompilationResult<Token>;
 
 	#[allow(clippy::too_many_lines)]
 	fn next(&mut self) -> Option<Self::Item> {
@@ -129,7 +127,7 @@ impl Iterator for Lexer<'_> {
 				// skip whitespaces
 				c if c.is_whitespace() => continue,
 				// something is wrong in the token stream
-				c => return Some(Err(Error::UnexpectedChar(c.to_string().into(), self.line))),
+				c => return Some(Err(CompilationError::UnexpectedChar { c, pos: self.line })),
 			};
 
 			// handling double & multi character token
@@ -290,7 +288,10 @@ impl Iterator for Lexer<'_> {
 							kind: TokenKind::String,
 						}))
 					} else {
-						return Some(Err(Error::UnterminatedString(self.whole[c_at..].into(), self.line)));
+						return Some(Err(CompilationError::UnterminatedString {
+							str: self.whole[c_at..].into(),
+							pos: self.line,
+						}));
 					}
 				}
 			};

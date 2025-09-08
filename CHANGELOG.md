@@ -16,6 +16,18 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.3.0] - 2025-09-07
+
+### Added
+- `cargo vet` files
+
+### Changed
+- Errorhandling reworked, it no longer uses `thiserror`
+- public `ScriptingValue::as_bool(...)` replaced with `bool::try_from(...)`
+
+### Removed
+- several unused errors
+
 ## [0.2.1] - 2025-09-03
 
 ### Changed

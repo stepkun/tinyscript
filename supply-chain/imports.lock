@@ -1,6 +1,14 @@
 
 # cargo-vet imports lock
 
+[[unpublished.tinyscript]]
+version = "0.3.0"
+audited_as = "0.2.1"
+
+[[unpublished.tinyscript-derive]]
+version = "0.2.2"
+audited_as = "0.2.1"
+
 [[publisher.bumpalo]]
 version = "3.19.0"
 when = "2025-06-24"

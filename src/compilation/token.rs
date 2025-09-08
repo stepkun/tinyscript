@@ -1,12 +1,11 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Token for `tinyscript` created by the [`Lexer`] for the [`Parser`]
+//! [`Token`] implementation created by the [`Lexer`](crate::compilation::Lexer) for the [`Parser`](crate::compilation::Parser)
 
 use core::fmt::Display;
 
 use alloc::string::String;
 
-/// Token kind
+/// The token kind designates the type of a [`Token`].
 #[derive(Debug, Clone, Copy, Ord, PartialOrd, PartialEq, Eq, Hash)]
 pub enum TokenKind {
 	/// Dummy to avoid using `Option<Token>` in many places
@@ -135,20 +134,26 @@ impl Display for TokenKind {
 	}
 }
 
-/// Token
+/// Token, the internals are directly visible to the crate.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Token {
 	/// Reference to the underlying location
-	pub origin: String,
-	/// @TODO
-	pub offset: usize,
-	/// @TODO
-	pub line: usize,
-	/// Kind of token
-	pub kind: TokenKind,
+	pub(crate) origin: String,
+	/// Position of the token in the line.
+	pub(crate) offset: usize,
+	/// Line of the token.
+	pub(crate) line: usize,
+	/// Kind of token.
+	pub(crate) kind: TokenKind,
 }
 
 impl Token {
+	/// Get the token type. Needed for testing purposes.
+	#[inline]
+	pub const fn kind(&self) -> TokenKind {
+		self.kind
+	}
+
 	pub fn none() -> Self {
 		Self {
 			origin: String::default(),

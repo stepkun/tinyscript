@@ -1,12 +1,10 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `UnaryParselet` for `tinyscript` analyzes and handles the prefix expressions
-//!
+//! [`UnaryParselet`] analyzes and handles the prefix (aka unary) expressions.
 
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::{CompilationError, CompilationResult},
 		precedence::Precedence,
 		token::{Token, TokenKind},
 	},
@@ -18,11 +16,14 @@ use super::PrefixParselet;
 pub struct UnaryParselet;
 
 impl PrefixParselet for UnaryParselet {
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> Result<(), Error> {
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		let token = parser.current();
 		// there must be a current token
 		if parser.next().kind == TokenKind::None {
-			return Err(Error::ExpressionExpected(parser.next().line));
+			return Err(CompilationError::ExpressionExpected {
+				token: "None".into(),
+				pos: parser.next().line,
+			});
 		}
 		// compile the operand
 		parser.with_precedence(lexer, Precedence::Unary, chunk)?;
@@ -46,7 +47,10 @@ impl PrefixParselet for UnaryParselet {
 				parser.emit_byte(OpCode::BitwiseNot as u8, chunk);
 				Ok(())
 			}
-			_ => Err(Error::Unreachable(file!().into(), line!())),
+			_ => Err(CompilationError::Unreachable {
+				file: file!().into(),
+				line: line!(),
+			}),
 		}
 	}
 }

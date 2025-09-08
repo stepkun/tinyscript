@@ -1,5 +1,4 @@
 // Copyright © 2025 Stephan Kunz
-
 //! Stuff to work with the environment
 
 // region:		--- modules
@@ -71,16 +70,17 @@ pub enum Error {
 	},
 }
 
+/// Currently the default implementation is sufficient.
 impl core::error::Error for Error {
-	fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-		None
-	}
+	// fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
+	// 	None
+	// }
 
-	fn cause(&self) -> Option<&dyn core::error::Error> {
-		self.source()
-	}
+	// fn cause(&self) -> Option<&dyn core::error::Error> {
+	// 	self.source()
+	// }
 
-	//fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
+	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
 }
 
 impl core::fmt::Debug for Error {

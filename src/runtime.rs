@@ -1,7 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Runtime environment for `tinyscript`
-//!
+//! Runtime environment implementation.
 
 #[doc(hidden)]
 #[cfg(feature = "std")]
@@ -12,7 +10,7 @@ use alloc::{collections::btree_map::BTreeMap, string::String, sync::Arc};
 use spin::Mutex;
 
 use crate::{
-	compiling::Parser,
+	compilation::Parser,
 	environment::Environment,
 	error::Error,
 	execution::{Chunk, ScriptingValue, VM},
@@ -59,7 +57,11 @@ impl Runtime {
 	/// - if en enum definition (key) already exists.
 	pub fn register_enum_tuple(&mut self, key: &str, value: i8) -> Result<(), Error> {
 		if let Some(old_value) = self.enums.get(key) {
-			return Err(Error::DuplicateEnumVariant(key.into(), *old_value, value));
+			return Err(Error::DuplicateEnumVariant {
+				name: key.into(),
+				old: *old_value,
+				new: value,
+			});
 		}
 		self.enums.insert(key.into(), value);
 		Ok(())
@@ -75,7 +77,8 @@ impl Runtime {
 	/// # Errors
 	/// - if script is invalid
 	pub fn parse(&mut self, script: &str) -> Result<Chunk, Error> {
-		self.parser.parse(&self.enums, script)
+		let chunk = self.parser.parse(&self.enums, script)?;
+		Ok(chunk)
 	}
 
 	/// Execute a bytecode chunk.
@@ -85,8 +88,8 @@ impl Runtime {
 		#[cfg(not(feature = "std"))]
 		let res = self.vm.run(chunk, globals);
 		#[cfg(feature = "std")]
-		let res = self.vm.run(chunk, globals, &mut self.stdout);
-		res
+		let res = self.vm.run(chunk, globals, &mut self.stdout)?;
+		Ok(res)
 	}
 
 	/// Continue running scripts.

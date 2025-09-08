@@ -1,12 +1,10 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `LogicParselet` for `tinyscript` analyzes and handles logical expressions
-//!
+//! [`LogicParselet`] analyzes and handles logical expressions.
 
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::{CompilationError, CompilationResult},
 		precedence::Precedence,
 		token::{Token, TokenKind},
 	},
@@ -26,7 +24,7 @@ impl LogicParselet {
 }
 
 impl InfixParselet for LogicParselet {
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> Result<(), Error> {
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		// The bitwise logic does not return a boolean result but an integer
 		// and resembles therefore more how arithmetic operations work.
 		// The QMark Colon expression is special again.
@@ -78,7 +76,10 @@ impl InfixParselet for LogicParselet {
 				Parser::patch_jump(end_pos, chunk);
 				Ok(())
 			}
-			_ => Err(Error::Unreachable(file!().into(), line!())),
+			_ => Err(CompilationError::Unreachable {
+				file: file!().into(),
+				line: line!(),
+			}),
 		}
 	}
 

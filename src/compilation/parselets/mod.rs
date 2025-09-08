@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//!Parselets for `tinyscript`
+//!Parselet implementations.
 
 mod assignment_parselet;
 mod binary_parselet;
@@ -19,7 +18,10 @@ pub use logic_parselet::LogicParselet;
 pub use unary_parselet::UnaryParselet;
 pub use value_parselet::ValueParselet;
 
-use crate::{Error, compiling::Parser, execution::Chunk};
+use crate::{
+	compilation::{Parser, error::CompilationResult},
+	execution::Chunk,
+};
 
 use super::{Lexer, precedence::Precedence, token::Token};
 
@@ -31,7 +33,7 @@ use super::{Lexer, precedence::Precedence, token::Token};
 /// which case `parse()` simply doesn't consume any more tokens.
 pub trait PrefixParselet: Send + Sync {
 	/// Parse the token
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error>;
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> CompilationResult<()>;
 }
 
 /// Interfaces used by the Pratt parser. An `InfixParselet` is
@@ -42,7 +44,7 @@ pub trait PrefixParselet: Send + Sync {
 /// which case `parse()` simply doesn't consume any more tokens.
 pub trait InfixParselet: Send + Sync {
 	/// Parse the token together with the left hand expression
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error>;
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> CompilationResult<()>;
 
 	/// Get the precedence the parselet is executed with.
 	fn get_precedence(&self) -> Precedence;

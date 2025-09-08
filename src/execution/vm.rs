@@ -1,6 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-
-//! Virtual machine for `tinyscript`
+//! Virtual machine implementation.
 
 #[doc(hidden)]
 #[cfg(feature = "std")]
@@ -9,7 +8,10 @@ extern crate std;
 // region:		--- modules
 use alloc::{borrow::ToOwned, string::ToString};
 
-use crate::{Error, environment::Environment};
+use crate::{
+	environment::Environment,
+	execution::{ExecutionError, ExecutionResult},
+};
 
 use super::{Chunk, ScriptingValue, op_code::OpCode};
 // endregion:	--- modules
@@ -63,9 +65,9 @@ impl VM {
 		&self.stack[self.stack_top - distance - 1]
 	}
 
-	fn push(&mut self, value: ScriptingValue) -> Result<(), Error> {
+	fn push(&mut self, value: ScriptingValue) -> ExecutionResult<()> {
 		if self.stack_top == u8::MAX as usize {
-			return Err(Error::StackOverflow);
+			return Err(ExecutionError::StackOverflow);
 		}
 		self.stack[self.stack_top] = value;
 		self.stack_top += 1;
@@ -86,7 +88,7 @@ impl VM {
 	}
 
 	#[allow(clippy::cast_precision_loss)]
-	fn arithmetic_operator(&mut self, operator: &OpCode) -> Result<(), Error> {
+	fn arithmetic_operator(&mut self, operator: &OpCode) -> ExecutionResult<()> {
 		let b_val = self.pop();
 		let a_val = self.pop();
 		match (&a_val, &b_val) {
@@ -96,7 +98,12 @@ impl VM {
 					OpCode::Subtract => a - b,
 					OpCode::Multiply => a * b,
 					OpCode::Divide => a / b,
-					_ => return Err(Error::Unreachable(file!().into(), line!())),
+					_ => {
+						return Err(ExecutionError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						});
+					}
 				};
 				self.push(ScriptingValue::Float64(res))
 			}
@@ -106,7 +113,12 @@ impl VM {
 					OpCode::Subtract => a - (*b as f64),
 					OpCode::Multiply => a * (*b as f64),
 					OpCode::Divide => a / (*b as f64),
-					_ => return Err(Error::Unreachable(file!().into(), line!())),
+					_ => {
+						return Err(ExecutionError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						});
+					}
 				};
 				self.push(ScriptingValue::Float64(res))
 			}
@@ -116,7 +128,12 @@ impl VM {
 					OpCode::Subtract => (*a as f64) - b,
 					OpCode::Multiply => (*a as f64) * b,
 					OpCode::Divide => (*a as f64) / b,
-					_ => return Err(Error::Unreachable(file!().into(), line!())),
+					_ => {
+						return Err(ExecutionError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						});
+					}
 				};
 				self.push(ScriptingValue::Float64(res))
 			}
@@ -126,30 +143,35 @@ impl VM {
 					OpCode::Subtract => a - b,
 					OpCode::Multiply => a * b,
 					OpCode::Divide => a / b,
-					_ => return Err(Error::Unreachable(file!().into(), line!())),
+					_ => {
+						return Err(ExecutionError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						});
+					}
 				};
 				self.push(ScriptingValue::Int64(res))
 			}
 			(ScriptingValue::String(a), _) => {
 				let res = match operator {
 					OpCode::Add => a.to_owned() + &b_val.to_string(),
-					_ => return Err(Error::OnlyAdd),
+					_ => return Err(ExecutionError::OnlyAdd),
 				};
 				self.push(ScriptingValue::String(res))
 			}
 			(_, ScriptingValue::String(b)) => {
 				let res = match operator {
 					OpCode::Add => a_val.to_string() + b,
-					_ => return Err(Error::OnlyAdd),
+					_ => return Err(ExecutionError::OnlyAdd),
 				};
 				self.push(ScriptingValue::String(res))
 			}
-			(ScriptingValue::Nil(), _) | (_, ScriptingValue::Nil()) => Err(Error::NilValue),
-			(ScriptingValue::Boolean(_), _) | (_, ScriptingValue::Boolean(_)) => Err(Error::BoolNoArithmetic),
+			(ScriptingValue::Nil(), _) | (_, ScriptingValue::Nil()) => Err(ExecutionError::NilValue),
+			(ScriptingValue::Boolean(_), _) | (_, ScriptingValue::Boolean(_)) => Err(ExecutionError::BoolNoArithmetic),
 		}
 	}
 
-	fn bitwise_operator(&mut self, operator: &OpCode) -> Result<(), Error> {
+	fn bitwise_operator(&mut self, operator: &OpCode) -> ExecutionResult<()> {
 		let b_val = self.pop();
 		let mut a_val = self.pop();
 		match (a_val, b_val) {
@@ -158,47 +180,74 @@ impl VM {
 					OpCode::BitwiseAnd => a & b,
 					OpCode::BitwiseOr => a | b,
 					OpCode::BitwiseXor => a ^ b,
-					_ => return Err(Error::Unreachable(file!().into(), line!())),
+					_ => {
+						return Err(ExecutionError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						});
+					}
 				};
 				a_val = ScriptingValue::Int64(res);
 				self.push(a_val)
 			}
-			_ => Err(Error::NoInteger),
+			(a_val, b_val) => Err(ExecutionError::NoInteger {
+				value: (a_val.to_string() + "/" + &b_val.to_string()).into(),
+			}),
 		}
 	}
 
 	#[allow(clippy::cast_precision_loss)]
-	fn comparison_operator(&mut self, operator: &OpCode) -> Result<(), Error> {
+	fn comparison_operator(&mut self, operator: &OpCode) -> ExecutionResult<()> {
 		let b_val = self.pop();
 		let mut a_val = self.pop();
 		let res = match (a_val, b_val) {
 			(ScriptingValue::Int64(a), ScriptingValue::Int64(b)) => match operator {
 				OpCode::Greater => a > b,
 				OpCode::Less => a < b,
-				_ => return Err(Error::Unreachable(file!().into(), line!())),
+				_ => {
+					return Err(ExecutionError::Unreachable {
+						file: file!().into(),
+						line: line!(),
+					});
+				}
 			},
 			(ScriptingValue::Int64(a), ScriptingValue::Float64(b)) => match operator {
 				OpCode::Greater => (a as f64) > b,
 				OpCode::Less => (a as f64) < b,
-				_ => return Err(Error::Unreachable(file!().into(), line!())),
+				_ => {
+					return Err(ExecutionError::Unreachable {
+						file: file!().into(),
+						line: line!(),
+					});
+				}
 			},
 			(ScriptingValue::Float64(a), ScriptingValue::Int64(b)) => match operator {
 				OpCode::Greater => a > (b as f64),
 				OpCode::Less => a < (b as f64),
-				_ => return Err(Error::Unreachable(file!().into(), line!())),
+				_ => {
+					return Err(ExecutionError::Unreachable {
+						file: file!().into(),
+						line: line!(),
+					});
+				}
 			},
 			(ScriptingValue::Float64(a), ScriptingValue::Float64(b)) => match operator {
 				OpCode::Greater => a > b,
 				OpCode::Less => a < b,
-				_ => return Err(Error::Unreachable(file!().into(), line!())),
+				_ => {
+					return Err(ExecutionError::Unreachable {
+						file: file!().into(),
+						line: line!(),
+					});
+				}
 			},
-			_ => return Err(Error::NoComparison),
+			_ => return Err(ExecutionError::NoComparison),
 		};
 		a_val = ScriptingValue::Boolean(res);
 		self.push(a_val)
 	}
 
-	fn constant(&mut self, chunk: &Chunk) -> Result<(), Error> {
+	fn constant(&mut self, chunk: &Chunk) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let constant = chunk.read_constant(pos);
 		self.ip += 1;
@@ -206,7 +255,7 @@ impl VM {
 	}
 
 	#[allow(clippy::cast_precision_loss)]
-	fn equal(&mut self) -> Result<(), Error> {
+	fn equal(&mut self) -> ExecutionResult<()> {
 		let b_val = self.pop();
 		let mut a_val = self.pop();
 		let res = match (a_val, b_val) {
@@ -232,26 +281,34 @@ impl VM {
 		self.push(a_val)
 	}
 
-	fn negate(&mut self) -> Result<(), Error> {
+	fn negate(&mut self) -> ExecutionResult<()> {
 		let val = self.pop();
 		let res = match val {
 			ScriptingValue::Int64(v) => ScriptingValue::Int64(-v),
 			ScriptingValue::Float64(v) => ScriptingValue::Float64(-v),
-			_ => return Err(Error::NoNumber),
+			_ => {
+				return Err(ExecutionError::NoNumber {
+					value: val.to_string().into(),
+				});
+			}
 		};
 		self.push(res)
 	}
 
-	fn bitwise_not(&mut self) -> Result<(), Error> {
+	fn bitwise_not(&mut self) -> ExecutionResult<()> {
 		let val = self.pop();
 		let res = match val {
 			ScriptingValue::Int64(v) => ScriptingValue::Int64(!v),
-			_ => return Err(Error::NoNumber),
+			_ => {
+				return Err(ExecutionError::NoNumber {
+					value: val.to_string().into(),
+				});
+			}
 		};
 		self.push(res)
 	}
 
-	fn not(&mut self) -> Result<(), Error> {
+	fn not(&mut self) -> ExecutionResult<()> {
 		let val = self.pop();
 		let res = match val {
 			ScriptingValue::Boolean(b) => ScriptingValue::Boolean(!b),
@@ -271,7 +328,7 @@ impl VM {
 		}
 	}
 
-	fn define_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> Result<(), Error> {
+	fn define_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -281,7 +338,7 @@ impl VM {
 		Ok(())
 	}
 
-	fn get_global(&mut self, chunk: &Chunk, globals: &dyn Environment) -> Result<(), Error> {
+	fn get_global(&mut self, chunk: &Chunk, globals: &dyn Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -290,7 +347,7 @@ impl VM {
 		Ok(())
 	}
 
-	fn set_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> Result<(), Error> {
+	fn set_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -309,7 +366,7 @@ impl VM {
 		chunk: &Chunk,
 		globals: &mut dyn Environment,
 		#[cfg(feature = "std")] stdout: &mut impl std::io::Write,
-	) -> Result<ScriptingValue, Error> {
+	) -> ExecutionResult<ScriptingValue> {
 		self.reset();
 		// ignore empty chunks
 		if chunk.code().is_empty() {
@@ -371,7 +428,10 @@ impl VM {
 				OpCode::SetExternal => self.set_global(chunk, globals)?,
 				OpCode::True => self.push(ScriptingValue::Boolean(true))?,
 				_ => {
-					return Err(Error::UnknownOpCode);
+					return Err(ExecutionError::Unreachable {
+						file: file!().into(),
+						line: line!(),
+					});
 				}
 			}
 		}

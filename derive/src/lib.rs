@@ -1,5 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-//! Derive macro [`ScriptEnum`] for `tinyscript`
+//! Derive macro [`ScriptEnum`].
 
 #[doc(hidden)]
 extern crate proc_macro;

@@ -1,13 +1,11 @@
 // Copyright © 2025 Stephan Kunz
-
-//! `AssignmentParselet` for `tinyscript` handles all kinds of assignments
-//!
+//! [`AssignmentParselet`] handles all kinds of assignments.
 
 // region:   	--- modules
 use crate::{
-	Error,
-	compiling::{
+	compilation::{
 		Lexer, Parser,
+		error::CompilationResult,
 		token::{Token, TokenKind},
 	},
 	execution::{Chunk, ScriptingValue, op_code::OpCode},
@@ -19,7 +17,7 @@ use super::PrefixParselet;
 pub struct AssignmentParselet;
 
 impl PrefixParselet for AssignmentParselet {
-	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> Result<(), Error> {
+	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, token: Token) -> CompilationResult<()> {
 		let next = parser.next();
 		match next.kind {
 			TokenKind::ColonEqual => {

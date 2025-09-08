@@ -8,14 +8,14 @@ doc_comment::doctest!("../README.md");
 #[doc(hidden)]
 extern crate alloc;
 
-pub mod compiling;
+pub mod compilation;
 pub mod environment;
 pub mod error;
 pub mod execution;
 pub mod runtime;
 
 // flatten
-pub use error::Error;
+pub use error::{Error, Result};
 pub use execution::Chunk;
 pub use runtime::{Runtime, SharedRuntime};
 
@@ -27,13 +27,15 @@ use alloc::{sync::Arc, vec::Vec};
 // endregion:	--- modules
 
 // region		--- types
-/// An immutable thread safe `String` type
+/// An immutable thread safe `String` type.
 /// see: [Logan Smith](https://www.youtube.com/watch?v=A4cKi7PTJSs).
 pub type ConstString = Arc<str>;
 // endregion:   --- types
 
+// region		--- ScriptEnum
 /// The trait for script enums.
 pub trait ScriptEnum {
 	/// Function to get key-value tuples for registering.
 	fn key_value_tuples<'a>() -> Vec<(&'a str, i8)>;
 }
+// endregion:   --- ScriptEnum
