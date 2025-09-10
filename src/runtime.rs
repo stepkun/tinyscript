@@ -13,7 +13,8 @@ use crate::{
 	compilation::Parser,
 	environment::Environment,
 	error::Error,
-	execution::{Chunk, ScriptingValue, VM},
+	execution::{Chunk, VM},
+	scripting_value::ScriptingValue,
 };
 
 #[cfg(feature = "std")]

@@ -6,14 +6,13 @@
 extern crate std;
 
 // region:		--- modules
-use alloc::{borrow::ToOwned, string::ToString};
-
+use super::{Chunk, op_code::OpCode};
 use crate::{
 	environment::Environment,
 	execution::{ExecutionError, ExecutionResult},
+	scripting_value::ScriptingValue,
 };
-
-use super::{Chunk, ScriptingValue, op_code::OpCode};
+use alloc::{borrow::ToOwned, string::ToString};
 // endregion:	--- modules
 
 /// Stack size is fixed to avoid cache misses, which drastically reduce performance.

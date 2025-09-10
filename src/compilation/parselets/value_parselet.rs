@@ -8,7 +8,8 @@ use crate::{
 		error::{CompilationError, CompilationResult},
 		token::{Token, TokenKind},
 	},
-	execution::{Chunk, ScriptingValue, op_code::OpCode},
+	execution::{Chunk, op_code::OpCode},
+	scripting_value::ScriptingValue,
 };
 
 use super::PrefixParselet;

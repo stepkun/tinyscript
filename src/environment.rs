@@ -8,7 +8,7 @@ use alloc::{
 };
 use spin::RwLock;
 
-use crate::{ConstString, execution::ScriptingValue};
+use crate::{ConstString, scripting_value::ScriptingValue};
 // endregion:	--- modules
 
 /// The trait for providing an [`Environment`] to a [`VM`](crate::execution::VM)

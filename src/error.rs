@@ -7,6 +7,7 @@ use crate::{ConstString, compilation::CompilationError, execution::ExecutionErro
 pub type Result<T> = core::result::Result<T, Error>;
 
 /// Error cases of the runtime
+#[non_exhaustive]
 pub enum Error {
 	/// Passthrough compilation errors.
 	Compilation {
@@ -27,10 +28,12 @@ pub enum Error {
 		/// Now defined value.
 		new: i8,
 	},
-	/// Expected Boolean, got something else.
-	NoBoolean {
+	/// Conversion failed.
+	TryConversion {
 		/// The faulty value.
 		value: ConstString,
+		/// the wanted conversion into.
+		into: ConstString,
 	},
 }
 
@@ -55,7 +58,7 @@ impl core::fmt::Debug for Error {
 			Self::DuplicateEnumVariant { name, old, new } => {
 				write!(f, "DuplicateEnumVariant(name: {name}, old: {old}, new: {new})")
 			}
-			Self::NoBoolean { value } => write!(f, "NoBoolean({value})"),
+			Self::TryConversion { value, into } => write!(f, "TryConversion(value: {value}, into: {into})"),
 		}
 	}
 }
@@ -68,7 +71,7 @@ impl core::fmt::Display for Error {
 			Self::DuplicateEnumVariant { name, old, new } => {
 				write!(f, "enum variant {name} already exists with value {old} new value: {new}")
 			}
-			Self::NoBoolean { value } => write!(f, "expected boolean, got {value}"),
+			Self::TryConversion { value, into } => write!(f, "conversion of value {value} into {into} is not possible"),
 		}
 	}
 }

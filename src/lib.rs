@@ -13,12 +13,14 @@ pub mod environment;
 pub mod error;
 pub mod execution;
 pub mod runtime;
+pub mod scripting_value;
 
 // flatten
-pub use environment::DefaultEnvironment;
+pub use environment::{DefaultEnvironment, Environment};
 pub use error::{Error, Result};
 pub use execution::Chunk;
 pub use runtime::{Runtime, SharedRuntime};
+pub use scripting_value::ScriptingValue;
 
 // reexport
 pub use tinyscript_derive::ScriptEnum;
