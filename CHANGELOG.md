@@ -16,16 +16,16 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
-## [0.4.0] - 2025-??-??
+## [0.4.0] - 2025-09-18
 
 ### Added
 - `from` && `try_from` conversions
 
 ### Changed
-
-### Fixed
+- import structure
 
 ### Removed
+- public visibility of ConstString
 
 ## [0.3.1] - 2025-09-08
 
@@ -98,5 +98,5 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ## [0.1.0] - 2025-07-19
 
-Version 0.1.0 focussed on implementation of the core language.
-Usage and exchange wwith the outside world is a very rough design, that will change.
+Version 0.1.0 focusses on implementation of the core language.
+Usage and exchange with the outside world is a very rough design, that will change.

@@ -32,7 +32,7 @@ use alloc::{sync::Arc, vec::Vec};
 // region		--- types
 /// An immutable thread safe `String` type.
 /// see: [Logan Smith](https://www.youtube.com/watch?v=A4cKi7PTJSs).
-pub type ConstString = Arc<str>;
+type ConstString = Arc<str>;
 // endregion:   --- types
 
 // region		--- ScriptEnum

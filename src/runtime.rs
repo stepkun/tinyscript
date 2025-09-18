@@ -1,5 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-//! Runtime environment implementation.
+//! A runtime for executing tinyscript code.
 
 #[doc(hidden)]
 #[cfg(feature = "std")]
@@ -22,12 +22,12 @@ use std::vec::Vec;
 // endregion:   --- modules
 
 // region:      --- types
-/// Definition of a shared [`Runtime`].
+/// Defines a shared [`Runtime`].
 pub type SharedRuntime = Arc<Mutex<Runtime>>;
 // endregion:   --- types
 
 // region:      --- Runtime
-/// Runtime environment for scripting.
+/// Runtime to execute tinyscript.
 #[derive(Debug, Default)]
 pub struct Runtime {
 	parser: Parser,
@@ -52,13 +52,12 @@ impl Clone for Runtime {
 }
 
 impl Runtime {
-	/// Insert enum value.
-	///
+	/// Inserts an enum value.
 	/// # Errors
-	/// - if en enum definition (key) already exists.
+	/// - [`Error::DuplicateEnumVariant`] if en enum definition (key) already exists.
 	pub fn register_enum_tuple(&mut self, key: &str, value: i8) -> Result<(), Error> {
 		if let Some(old_value) = self.enums.get(key) {
-			return Err(Error::DuplicateEnumVariant {
+			return Err(Error::DuplicateVariant {
 				name: key.into(),
 				old: *old_value,
 				new: value,
@@ -76,7 +75,7 @@ impl Runtime {
 
 	/// Parse a scripting source.
 	/// # Errors
-	/// - if script is invalid
+	/// - [`Error::Compilation`] if script is invalid
 	pub fn parse(&mut self, script: &str) -> Result<Chunk, Error> {
 		let chunk = self.parser.parse(&self.enums, script)?;
 		Ok(chunk)
@@ -84,7 +83,7 @@ impl Runtime {
 
 	/// Execute a bytecode chunk.
 	/// # Errors
-	/// - if
+	/// - [`Error::Execution`] if script cannot be executed.
 	pub fn execute(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
 		#[cfg(not(feature = "std"))]
 		let res = self.vm.run(chunk, globals)?;
@@ -93,10 +92,10 @@ impl Runtime {
 		Ok(res)
 	}
 
-	/// Continue running scripts.
-	/// Does not clear stdout before execution.
+	/// Compiles and runs the new script without clearing stdout.
 	/// # Errors
-	/// - if
+	/// - [`Error::Compilation`] if script is invalid.
+	/// - [`Error::Execution`] if script cannot be executed.
 	pub fn continue_run(&mut self, script: &str, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
 		let chunk = self.parser.parse(&self.enums, script)?;
 		#[cfg(not(feature = "std"))]
@@ -109,21 +108,21 @@ impl Runtime {
 	/// Run a script.
 	/// Clears stdout before execution.
 	/// # Errors
-	/// - if
+	/// - [`Error::Execution`] if script cannot be executed.
 	pub fn run(&mut self, script: &str, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
 		#[cfg(feature = "std")]
 		self.stdout.clear();
 		self.continue_run(script, globals)
 	}
 
-	/// Access the stdout.
+	/// Returns the stdout.
 	#[cfg(feature = "std")]
 	#[must_use]
 	pub const fn stdout(&self) -> &Vec<u8> {
 		&self.stdout
 	}
 
-	/// Clear runtime.
+	/// Clears runtimes stdout.
 	pub fn clear(&mut self) {
 		#[cfg(feature = "std")]
 		self.stdout.clear();

@@ -1,5 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-//! A universal [`ScriptingValue`] type implementation.
+//! A universal [`ScriptingValue`] type.
 
 #[doc(hidden)]
 extern crate alloc;
@@ -12,7 +12,7 @@ use core::{
 
 use crate::execution::{ExecutionError, ExecutionResult};
 
-/// Value type to allow storing different kinds of values.
+/// Value type that allows storing different kinds of values.
 #[derive(Clone, Debug)]
 pub enum ScriptingValue {
 	/// Nil signals the absence of a `Value`

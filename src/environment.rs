@@ -1,5 +1,5 @@
 // Copyright © 2025 Stephan Kunz
-//! Stuff to work with the environment
+//! A tratt to work with the outside world and a default implementation.
 
 // region:		--- modules
 use alloc::{
@@ -12,17 +12,21 @@ use crate::{ConstString, scripting_value::ScriptingValue};
 // endregion:	--- modules
 
 /// The trait for providing an [`Environment`] to a [`VM`](crate::execution::VM)
-/// that stores variables persistently and externally available.
+/// that stores the [`ScriptingValue`]s persistent and external available.
+///
+/// An environment must be a key-value-store that can store [`ScriptingValue`]s.
 pub trait Environment: Send + Sync {
-	/// Define the variable with `key` to `value`.
-	/// It will be created if it does not already exist.
+	/// Creates or updates the [`ScriptingValue`] behind `key`.
+	/// Value will be created if it does not already exist.
 	/// # Errors
-	/// if the Variable exists with a different type
+	/// [`Error::EnvVarWrongType`] if the variable exists with a different type.
 	fn define_env(&mut self, key: &str, value: ScriptingValue) -> Result<(), Error>;
-	/// Get a variable by `key`
+
+	/// Returns the [`ScriptingValue`] stored behind `key`.
 	/// # Errors
-	/// if the variable does not exist
+	/// [`Error::EnvVarNotDefined`] if the variable does not exist
 	fn get_env(&self, key: &str) -> Result<ScriptingValue, Error>;
+
 	/// Set the variable with `key` to `value`.
 	/// # Errors
 	/// if variable does not exist.
@@ -61,7 +65,7 @@ pub enum Error {
 		cause: ConstString,
 	},
 
-	/// An error when casting the type of the variable.
+	/// An error casting the type of the variable.
 	EnvVarTypeCast {
 		/// Name of the variable
 		name: ConstString,
@@ -118,7 +122,7 @@ impl core::fmt::Display for Error {
 	}
 }
 
-/// A very simple default Environment for testing purpose and the REPL
+/// A very simple default Environment for testing purpose and the REPL.
 #[derive(Debug, Default)]
 pub struct DefaultEnvironment {
 	storage: RwLock<BTreeMap<String, ScriptingValue>>,

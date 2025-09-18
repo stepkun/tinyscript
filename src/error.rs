@@ -20,7 +20,7 @@ pub enum Error {
 		source: ExecutionError,
 	},
 	/// Tried to redefine an enum value.
-	DuplicateEnumVariant {
+	DuplicateVariant {
 		/// Name of the enum value.
 		name: ConstString,
 		/// Previously defined value.
@@ -37,10 +37,14 @@ pub enum Error {
 	},
 }
 
-/// Only a source implemaentation needed.
+/// Only a source implementation needed.
 impl core::error::Error for Error {
 	fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-		None
+		match self {
+			Self::Compilation { source } => Some(source),
+			Self::Execution { source } => Some(source),
+			_ => None,
+		}
 	}
 
 	// fn cause(&self) -> Option<&dyn core::error::Error> {
@@ -55,8 +59,8 @@ impl core::fmt::Debug for Error {
 		match self {
 			Self::Compilation { source } => write!(f, "Compilation({source:?})"),
 			Self::Execution { source } => write!(f, "Execution({source:?})"),
-			Self::DuplicateEnumVariant { name, old, new } => {
-				write!(f, "DuplicateEnumVariant(name: {name}, old: {old}, new: {new})")
+			Self::DuplicateVariant { name, old, new } => {
+				write!(f, "DuplicateVariant(name: {name}, old: {old}, new: {new})")
 			}
 			Self::TryConversion { value, into } => write!(f, "TryConversion(value: {value}, into: {into})"),
 		}
@@ -68,7 +72,7 @@ impl core::fmt::Display for Error {
 		match self {
 			Self::Compilation { source } => write!(f, "compilation error: {source}"),
 			Self::Execution { source } => write!(f, "execution error:{source}"),
-			Self::DuplicateEnumVariant { name, old, new } => {
+			Self::DuplicateVariant { name, old, new } => {
 				write!(f, "enum variant {name} already exists with value {old} new value: {new}")
 			}
 			Self::TryConversion { value, into } => write!(f, "conversion of value {value} into {into} is not possible"),
@@ -77,13 +81,13 @@ impl core::fmt::Display for Error {
 }
 
 impl From<CompilationError> for Error {
-	fn from(error: CompilationError) -> Self {
-		Self::Compilation { source: error }
+	fn from(source: CompilationError) -> Self {
+		Self::Compilation { source }
 	}
 }
 
 impl From<ExecutionError> for Error {
-	fn from(error: ExecutionError) -> Self {
-		Self::Execution { source: error }
+	fn from(source: ExecutionError) -> Self {
+		Self::Execution { source }
 	}
 }
