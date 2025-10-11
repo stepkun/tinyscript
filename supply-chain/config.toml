@@ -79,10 +79,6 @@ criteria = "safe-to-run"
 version = "0.15.5"
 criteria = "safe-to-run"
 
-[[exemptions.indexmap]]
-version = "2.11.0"
-criteria = "safe-to-run"
-
 [[exemptions.js-sys]]
 version = "0.3.77"
 criteria = "safe-to-run"
