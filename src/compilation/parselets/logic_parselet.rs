@@ -24,6 +24,7 @@ impl LogicParselet {
 }
 
 impl InfixParselet for LogicParselet {
+	#[allow(clippy::too_many_lines)]
 	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		// The bitwise logic does not return a boolean result but an integer
 		// and resembles therefore more how arithmetic operations work.
@@ -31,31 +32,76 @@ impl InfixParselet for LogicParselet {
 		let kind = parser.current().kind;
 		match kind {
 			TokenKind::Ampersand => {
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				parser.emit_byte(OpCode::BitwiseAnd as u8, chunk);
 				Ok(())
 			}
 			TokenKind::And => {
 				let target_pos = parser.emit_jump(OpCode::JmpIfFalse as u8, chunk);
 				parser.emit_byte(OpCode::Pop as u8, chunk);
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				Parser::patch_jump(target_pos, chunk);
 				Ok(())
 			}
 			TokenKind::Caret => {
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				parser.emit_byte(OpCode::BitwiseXor as u8, chunk);
 				Ok(())
 			}
 			TokenKind::Or => {
 				let target_pos = parser.emit_jump(OpCode::JmpIfTrue as u8, chunk);
 				parser.emit_byte(OpCode::Pop as u8, chunk);
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				Parser::patch_jump(target_pos, chunk);
 				Ok(())
 			}
 			TokenKind::Pipe => {
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				parser.emit_byte(OpCode::BitwiseOr as u8, chunk);
 				Ok(())
 			}
@@ -64,7 +110,16 @@ impl InfixParselet for LogicParselet {
 				// remove the decision value
 				parser.emit_byte(OpCode::Pop as u8, chunk);
 				// run the "true" expression
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				let end_pos = parser.emit_jump(OpCode::Jmp as u8, chunk);
 				Parser::patch_jump(else_pos, chunk);
 				// consume the ':'
@@ -72,7 +127,16 @@ impl InfixParselet for LogicParselet {
 				// remove the decision value
 				parser.emit_byte(OpCode::Pop as u8, chunk);
 				// run the "false" expression
-				parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+				parser.with_precedence(
+					lexer,
+					self.precedence
+						.next_higher()
+						.ok_or_else(|| CompilationError::Unreachable {
+							file: file!().into(),
+							line: line!(),
+						})?,
+					chunk,
+				)?;
 				Parser::patch_jump(end_pos, chunk);
 				Ok(())
 			}

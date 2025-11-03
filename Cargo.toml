@@ -3,12 +3,12 @@
 [package]
 resolver = "3"
 name = "tinyscript"
-version = "0.4.1"
+version = "0.4.2"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 description = "Tiny, C-like scripting language."
-rust-version = "1.86.0"
+rust-version = "1.88.0"
 repository = "https://github.com/stepkun/tinyscript"
 homepage = "https://github.com/stepkun/tinyscript"
 documentation = "https://docs.rs/tinyscript"

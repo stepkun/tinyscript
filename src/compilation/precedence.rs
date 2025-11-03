@@ -29,22 +29,22 @@ pub enum Precedence {
 
 impl Precedence {
 	/// Get the next higher [`Precedence`]
-	pub const fn next_higher(self) -> Self {
+	pub const fn next_higher(self) -> Option<Self> {
 		match self {
-			Self::None => Self::Assignment,
-			Self::Assignment => Self::Ternary,
-			Self::Ternary => Self::Or,
-			Self::Or => Self::And,
-			Self::And => Self::BitOr,
-			Self::BitOr => Self::BitXor,
-			Self::BitXor => Self::BitAnd,
-			Self::BitAnd => Self::Equality,
-			Self::Equality => Self::Comparison,
-			Self::Comparison => Self::Term,
-			Self::Term => Self::Factor,
-			Self::Factor => Self::Unary,
-			Self::Unary => Self::Primary,
-			Self::Primary => panic!(),
+			Self::None => Some(Self::Assignment),
+			Self::Assignment => Some(Self::Ternary),
+			Self::Ternary => Some(Self::Or),
+			Self::Or => Some(Self::And),
+			Self::And => Some(Self::BitOr),
+			Self::BitOr => Some(Self::BitXor),
+			Self::BitXor => Some(Self::BitAnd),
+			Self::BitAnd => Some(Self::Equality),
+			Self::Equality => Some(Self::Comparison),
+			Self::Comparison => Some(Self::Term),
+			Self::Term => Some(Self::Factor),
+			Self::Factor => Some(Self::Unary),
+			Self::Unary => Some(Self::Primary),
+			Self::Primary => None,
 		}
 	}
 }

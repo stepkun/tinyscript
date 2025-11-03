@@ -16,6 +16,12 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.4.2] - 2025-11-03
+
+### Changed
+- replaced calls to `panic!()` with error handling
+- updated Rust version to 1.88.0
+
 ## [0.4.1] - 2025-10-11
 
 ### Changed

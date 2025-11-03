@@ -26,7 +26,16 @@ impl BinaryParselet {
 impl InfixParselet for BinaryParselet {
 	fn parse(&self, lexer: &mut Lexer, parser: &mut Parser, chunk: &mut Chunk, _token: Token) -> CompilationResult<()> {
 		let kind = parser.current().kind;
-		parser.with_precedence(lexer, self.precedence.next_higher(), chunk)?;
+		parser.with_precedence(
+			lexer,
+			self.precedence
+				.next_higher()
+				.ok_or_else(|| CompilationError::Unreachable {
+					file: file!().into(),
+					line: line!(),
+				})?,
+			chunk,
+		)?;
 		match kind {
 			TokenKind::BangEqual => {
 				parser.emit_bytes(OpCode::Equal as u8, OpCode::Not as u8, chunk);
