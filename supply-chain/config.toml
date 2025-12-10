@@ -71,10 +71,6 @@ criteria = "safe-to-run"
 version = "0.3.77"
 criteria = "safe-to-run"
 
-[[exemptions.oorandom]]
-version = "11.1.5"
-criteria = "safe-to-run"
-
 [[exemptions.plotters]]
 version = "0.3.7"
 criteria = "safe-to-run"

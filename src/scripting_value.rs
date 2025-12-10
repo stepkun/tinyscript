@@ -120,11 +120,11 @@ impl TryFrom<ScriptingValue> for u64 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= 0 {
-				#[allow(clippy::cast_sign_loss)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= 0
+		{
+			#[allow(clippy::cast_sign_loss)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -152,11 +152,12 @@ impl TryFrom<ScriptingValue> for i32 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= i64::from(Self::MIN) && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= i64::from(Self::MIN)
+			&& i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -176,12 +177,12 @@ impl TryFrom<ScriptingValue> for u32 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= 0 && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				#[allow(clippy::cast_sign_loss)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= 0 && i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			#[allow(clippy::cast_sign_loss)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -201,11 +202,12 @@ impl TryFrom<ScriptingValue> for i16 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= i64::from(Self::MIN) && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= i64::from(Self::MIN)
+			&& i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -225,12 +227,12 @@ impl TryFrom<ScriptingValue> for u16 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= 0 && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				#[allow(clippy::cast_sign_loss)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= 0 && i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			#[allow(clippy::cast_sign_loss)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -250,11 +252,12 @@ impl TryFrom<ScriptingValue> for i8 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= i64::from(Self::MIN) && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= i64::from(Self::MIN)
+			&& i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
@@ -274,12 +277,12 @@ impl TryFrom<ScriptingValue> for u8 {
 	type Error = crate::Error;
 
 	fn try_from(value: ScriptingValue) -> Result<Self, Self::Error> {
-		if let ScriptingValue::Int64(i) = value {
-			if i >= 0 && i <= i64::from(Self::MAX) {
-				#[allow(clippy::cast_possible_truncation)]
-				#[allow(clippy::cast_sign_loss)]
-				return Ok(i as Self);
-			}
+		if let ScriptingValue::Int64(i) = value
+			&& i >= 0 && i <= i64::from(Self::MAX)
+		{
+			#[allow(clippy::cast_possible_truncation)]
+			#[allow(clippy::cast_sign_loss)]
+			return Ok(i as Self);
 		}
 
 		Err(crate::Error::TryConversion {
