@@ -1,13 +1,14 @@
 # Copyright © 2025 Stephan Kunz
 [package]
 name = "tinyscript-derive"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
-rust-version = "1.86.0"
+rust-version = "1.90.0"
 description = "Procedural macros for tinyscript"
 documentation = "https://docs.rs/tinyscript-derive"
+homepage = "https://docs.rs/tinyscript-derive"
 repository = "https://github.com/stepkun/tinyscript"
 readme = "../README.md"
 exclude = ["benches/**", "examples/**", "tests/**"]
@@ -39,12 +40,12 @@ name = "tests"
 path = "tests/all.rs"
 
 [dependencies]
-proc-macro2 = "1.0"
-quote = "1.0"
-syn = { version = "2.0", features = ["full", "parsing", "visit-mut"] }
+proc-macro2 = "1"
+quote = "1"
+syn = { version = "2", features = ["full", "parsing", "visit-mut"] }
 
 [build-dependencies]
 
 [dev-dependencies]
 tinyscript = { path = "../" }
-trybuild = { version = "1.0", features = ["diff"] }
+trybuild = { version = "1", features = ["diff"] }

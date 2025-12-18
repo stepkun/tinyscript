@@ -3,7 +3,7 @@
 [package]
 resolver = "3"
 name = "tinyscript"
-version = "0.4.2"
+version = "0.4.3"
 edition = "2024"
 license = "MIT OR Apache-2.0"
 authors = ["stepkun <stephan.kunz@kabelbw.de>"]
@@ -54,7 +54,7 @@ name = "expression"
 harness = false
 
 [dependencies]
-tinyscript-derive = { path = "derive", version = "0.2" }
+tinyscript-derive = { path = "derive", version = "0.2.3" }
 spin = { version = "0.10.0", default-features = false, features = [
   "portable-atomic",
   "rwlock",
@@ -62,8 +62,8 @@ spin = { version = "0.10.0", default-features = false, features = [
 ] }
 
 [dev-dependencies]
-criterion = "0.7.0"
-doc-comment = "0.3.3"
+criterion = "0.8.1"
+doc-comment = "0.3.4"
 rstest = "0.26.1"
 
 [features]

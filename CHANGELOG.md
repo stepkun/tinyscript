@@ -16,6 +16,11 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.4.3] - 2025-12-18
+
+### Changed
+- updated dependencies
+
 ## [0.4.2] - 2025-11-03
 
 ### Changed
