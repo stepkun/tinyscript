@@ -20,7 +20,7 @@ pub trait Environment: Send + Sync {
 	/// Value will be created if it does not already exist.
 	/// # Errors
 	/// [`Error::EnvVarWrongType`] if the variable exists with a different type.
-	fn define_env(&mut self, key: &str, value: ScriptingValue) -> Result<(), Error>;
+	fn define_env(&mut self, key: &str, value: impl Into<ScriptingValue>) -> Result<(), Error>;
 
 	/// Returns the [`ScriptingValue`] stored behind `key`.
 	/// # Errors
@@ -30,7 +30,7 @@ pub trait Environment: Send + Sync {
 	/// Set the variable with `key` to `value`.
 	/// # Errors
 	/// if variable does not exist.
-	fn set_env(&mut self, key: &str, value: ScriptingValue) -> Result<(), Error>;
+	fn set_env(&mut self, key: &str, value: impl Into<ScriptingValue>) -> Result<(), Error>;
 }
 
 /// Errors that can happen when interacting with an [`Environment`].
@@ -75,17 +75,7 @@ pub enum Error {
 }
 
 /// Currently the default implementation is sufficient.
-impl core::error::Error for Error {
-	// fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-	// 	None
-	// }
-
-	// fn cause(&self) -> Option<&dyn core::error::Error> {
-	// 	self.source()
-	// }
-
-	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
-}
+impl core::error::Error for Error {}
 
 impl core::fmt::Debug for Error {
 	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
@@ -129,28 +119,28 @@ pub struct DefaultEnvironment {
 }
 
 impl Environment for DefaultEnvironment {
-	fn define_env(&mut self, name: &str, value: ScriptingValue) -> Result<(), Error> {
+	fn define_env(&mut self, key: &str, value: impl Into<ScriptingValue>) -> Result<(), Error> {
 		self.storage
 			.write()
-			.insert(name.to_string(), value);
+			.insert(key.to_string(), value.into());
 		Ok(())
 	}
 
-	fn get_env(&self, name: &str) -> Result<ScriptingValue, Error> {
-		self.storage.read().get(name).map_or_else(
-			|| Err(Error::EnvVarNotDefined { name: name.into() }),
+	fn get_env(&self, key: &str) -> Result<ScriptingValue, Error> {
+		self.storage.read().get(key).map_or_else(
+			|| Err(Error::EnvVarNotDefined { name: key.into() }),
 			|value| Ok(value.clone()),
 		)
 	}
 
-	fn set_env(&mut self, name: &str, value: ScriptingValue) -> Result<(), Error> {
-		if self.storage.read().contains_key(name) {
+	fn set_env(&mut self, key: &str, value: impl Into<ScriptingValue>) -> Result<(), Error> {
+		if self.storage.read().contains_key(key) {
 			self.storage
 				.write()
-				.insert(name.to_string(), value);
+				.insert(key.to_string(), value.into());
 			Ok(())
 		} else {
-			Err(Error::EnvVarNotDefined { name: name.into() })
+			Err(Error::EnvVarNotDefined { name: key.into() })
 		}
 	}
 }

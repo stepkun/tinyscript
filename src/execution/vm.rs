@@ -327,7 +327,7 @@ impl VM {
 		}
 	}
 
-	fn define_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> ExecutionResult<()> {
+	fn define_global(&mut self, chunk: &Chunk, globals: &mut impl Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -337,7 +337,7 @@ impl VM {
 		Ok(())
 	}
 
-	fn get_global(&mut self, chunk: &Chunk, globals: &dyn Environment) -> ExecutionResult<()> {
+	fn get_global(&mut self, chunk: &Chunk, globals: &impl Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -346,7 +346,7 @@ impl VM {
 		Ok(())
 	}
 
-	fn set_global(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> ExecutionResult<()> {
+	fn set_global(&mut self, chunk: &Chunk, globals: &mut impl Environment) -> ExecutionResult<()> {
 		let pos = chunk.code()[self.ip];
 		let name_val = chunk.read_constant(pos);
 		self.ip += 1;
@@ -363,7 +363,7 @@ impl VM {
 	pub fn run(
 		&mut self,
 		chunk: &Chunk,
-		globals: &mut dyn Environment,
+		globals: &mut impl Environment,
 		#[cfg(feature = "std")] stdout: &mut impl std::io::Write,
 	) -> ExecutionResult<ScriptingValue> {
 		self.reset();

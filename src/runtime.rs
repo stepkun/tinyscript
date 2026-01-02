@@ -84,7 +84,7 @@ impl Runtime {
 	/// Execute a bytecode chunk.
 	/// # Errors
 	/// - [`Error::Execution`] if script cannot be executed.
-	pub fn execute(&mut self, chunk: &Chunk, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
+	pub fn execute(&mut self, chunk: &Chunk, globals: &mut impl Environment) -> Result<ScriptingValue, Error> {
 		#[cfg(not(feature = "std"))]
 		let res = self.vm.run(chunk, globals)?;
 		#[cfg(feature = "std")]
@@ -96,7 +96,7 @@ impl Runtime {
 	/// # Errors
 	/// - [`Error::Compilation`] if script is invalid.
 	/// - [`Error::Execution`] if script cannot be executed.
-	pub fn continue_run(&mut self, script: &str, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
+	pub fn continue_run(&mut self, script: &str, globals: &mut impl Environment) -> Result<ScriptingValue, Error> {
 		let chunk = self.parser.parse(&self.enums, script)?;
 		#[cfg(not(feature = "std"))]
 		let res = self.vm.run(&chunk, globals)?;
@@ -109,7 +109,7 @@ impl Runtime {
 	/// Clears stdout before execution.
 	/// # Errors
 	/// - [`Error::Execution`] if script cannot be executed.
-	pub fn run(&mut self, script: &str, globals: &mut dyn Environment) -> Result<ScriptingValue, Error> {
+	pub fn run(&mut self, script: &str, globals: &mut impl Environment) -> Result<ScriptingValue, Error> {
 		#[cfg(feature = "std")]
 		self.stdout.clear();
 		self.continue_run(script, globals)

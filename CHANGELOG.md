@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html),
 especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.html).
 
-## [Schema] - 2025-??-??
+## [Schema] - JJJJ-MM-DD
 
 ### Added
 
@@ -15,6 +15,12 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 ### Fixed
 
 ### Removed
+
+## [0.5.0] - 2026-01-02
+
+### Changed
+- use of `impl Into<ScriptingValue>` in `Environment`s function signatures, 
+  therefore the trait `Environment` is no longer `dyn compatible`.
 
 ## [0.4.3] - 2025-12-18
 
