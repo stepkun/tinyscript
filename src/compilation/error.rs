@@ -80,40 +80,9 @@ pub enum CompilationError {
 }
 
 /// Currently the default implementation is sufficient.
-impl core::error::Error for CompilationError {
-	// fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-	// 	None
-	// }
-
-	// fn cause(&self) -> Option<&dyn core::error::Error> {
-	// 	self.source()
-	// }
-
-	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
-}
+impl core::error::Error for CompilationError {}
 
 impl core::fmt::Debug for CompilationError {
-	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-		match self {
-			Self::ConstantStorageOverflow => write!(f, "ConstantStorageOverflow"),
-			Self::EnumValNotFound { value, pos } => write!(f, "EnumValNotFound(value: {value}, line: {pos})"),
-			Self::ExpressionExpected { token, pos } => {
-				write!(f, "ExpressionExpected(token: {token}, line: {pos})")
-			}
-			Self::ParseHex { token, pos } => write!(f, "ParseHex(token: {token}, line: {pos})"),
-			Self::ParseInt { token, pos } => write!(f, "ParseInt(token: {token}, line: {pos})"),
-			Self::ParseNumber { token, pos } => write!(f, "ParseNumber(token: {token}, line: {pos})"),
-			Self::TokenExpected { expected, found, pos } => {
-				write!(f, "TokenExpected(expected: {expected}, found: {found}, line: {pos})")
-			}
-			Self::UnexpectedChar { c, pos } => write!(f, "UnexpectedChar(char: {c}, line: {pos})"),
-			Self::UnterminatedString { str, pos } => write!(f, "UnterminatedString(string: {str}, line: {pos})"),
-			Self::Unreachable { file, line } => write!(f, "Unreachable(file: {file}, line: {line})"),
-		}
-	}
-}
-
-impl core::fmt::Display for CompilationError {
 	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
 		match self {
 			Self::ConstantStorageOverflow => write!(f, "to many constant values defined: storage overflow"),
@@ -131,5 +100,11 @@ impl core::fmt::Display for CompilationError {
 			Self::UnterminatedString { str, pos } => write!(f, "unterminated string {str} at line {pos}"),
 			Self::Unreachable { file, line } => write!(f, "{file} at line {line} should be unreachable"),
 		}
+	}
+}
+
+impl core::fmt::Display for CompilationError {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		core::fmt::Debug::fmt(self, f)
 	}
 }

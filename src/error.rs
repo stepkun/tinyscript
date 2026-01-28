@@ -46,28 +46,9 @@ impl core::error::Error for Error {
 			_ => None,
 		}
 	}
-
-	// fn cause(&self) -> Option<&dyn core::error::Error> {
-	//  	self.source()
-	// }
-
-	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
 }
 
 impl core::fmt::Debug for Error {
-	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-		match self {
-			Self::Compilation { source } => write!(f, "Compilation({source:?})"),
-			Self::Execution { source } => write!(f, "Execution({source:?})"),
-			Self::DuplicateVariant { name, old, new } => {
-				write!(f, "DuplicateVariant(name: {name}, old: {old}, new: {new})")
-			}
-			Self::TryConversion { value, into } => write!(f, "TryConversion(value: {value}, into: {into})"),
-		}
-	}
-}
-
-impl core::fmt::Display for Error {
 	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
 		match self {
 			Self::Compilation { source } => write!(f, "compilation error: {source}"),
@@ -77,6 +58,12 @@ impl core::fmt::Display for Error {
 			}
 			Self::TryConversion { value, into } => write!(f, "conversion of value {value} into {into} is not possible"),
 		}
+	}
+}
+
+impl core::fmt::Display for Error {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		core::fmt::Debug::fmt(self, f)
 	}
 }
 

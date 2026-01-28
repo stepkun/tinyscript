@@ -16,6 +16,17 @@ especially the [Rust flavour](https://doc.rust-lang.org/cargo/reference/semver.h
 
 ### Removed
 
+## [0.5.1] - 2026-??-??
+
+### Changed
+- Debug print is same as Display print
+
+## [0.5.0] - 2026-01-02
+
+### Changed
+- use of `impl Into<ScriptingValue>` in `Environment`s function signatures, 
+  therefore the trait `Environment` is no longer `dyn compatible`.
+
 ## [0.5.0] - 2026-01-02
 
 ### Changed

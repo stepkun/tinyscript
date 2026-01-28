@@ -50,36 +50,9 @@ pub enum ExecutionError {
 }
 
 /// Currently the default implementation is sufficient.
-impl core::error::Error for ExecutionError {
-	// fn source(&self) -> Option<&(dyn core::error::Error + 'static)> {
-	// 	None
-	// }
-
-	// fn cause(&self) -> Option<&dyn core::error::Error> {
-	// 	self.source()
-	// }
-
-	// fn provide<'a>(&'a self, request: &mut core::error::Request<'a>) {}
-}
+impl core::error::Error for ExecutionError {}
 
 impl core::fmt::Debug for ExecutionError {
-	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-		match self {
-			Self::BoolNoArithmetic => write!(f, "BoolNoArithmetic"),
-			Self::Environment { source } => write!(f, "Environment({source:?})"),
-			Self::NilValue => write!(f, "NilValue"),
-			Self::NoBoolean { value } => write!(f, "NoBoolean({value})"),
-			Self::NoComparison => write!(f, "NoComparison"),
-			Self::NoInteger { value } => write!(f, "NoInteger({value})"),
-			Self::NoNumber { value } => write!(f, "NoNumber({value})"),
-			Self::StackOverflow => write!(f, "StackOverflow"),
-			Self::OnlyAdd => write!(f, "OnlyAdd"),
-			Self::Unreachable { file, line } => write!(f, "Unreachable(file: {file}, line: {line})"),
-		}
-	}
-}
-
-impl core::fmt::Display for ExecutionError {
 	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
 		match self {
 			Self::BoolNoArithmetic => write!(f, "boolean values do not allow arithmetic operations"),
@@ -93,6 +66,12 @@ impl core::fmt::Display for ExecutionError {
 			Self::OnlyAdd => write!(f, "to Strings you can only 'ADD' something"),
 			Self::Unreachable { file, line } => write!(f, "{file} at line {line} should be unreachable"),
 		}
+	}
+}
+
+impl core::fmt::Display for ExecutionError {
+	fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+		core::fmt::Debug::fmt(self, f)
 	}
 }
 
