@@ -12,6 +12,7 @@ pub mod compilation;
 pub mod environment;
 pub mod error;
 pub mod execution;
+pub mod prelude;
 pub mod runtime;
 pub mod scripting_value;
 
